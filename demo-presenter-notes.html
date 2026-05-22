@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BrandSafway Demo Presenter Notes</title>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--ink:#162033;--muted:#58667d;--line:#d7e0ea;--do:#1f9d55;--say:#2563eb;--expect:#ca8a04;--fallback:#dc2626;--brand:#0f3d75;--accent:#ffd700;--shadow:0 12px 30px rgba(15,23,42,.08)}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:18px/1.5 Segoe UI,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#fbfdff,#eef3f9)}a{color:var(--brand)}.sidebar{position:fixed;inset:0 auto 0 0;width:290px;overflow:auto;padding:22px 18px;background:#fff;border-right:1px solid var(--line)}.brand{padding:14px 16px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#fff,#f6f9fd);box-shadow:var(--shadow)}.brand h1{margin:0 0 8px;font-size:1.45rem;line-height:1.15}.brand p,.small{margin:0;color:var(--muted);font-size:.95rem}.nav{display:grid;gap:8px;margin:18px 0}.nav a{display:block;padding:10px 12px;border-radius:12px;text-decoration:none;color:var(--ink);border:1px solid transparent}.nav a:hover,.nav a:focus{background:#eff6ff;border-color:#bfdbfe}.legend,.meta{margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#fff}.legend div{margin:7px 0;font-weight:700}.main{margin-left:290px;padding:28px 30px 50px;max-width:1200px}.hero{padding:26px 28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(135deg,#fff,#f8fbff);box-shadow:var(--shadow)}.eyebrow{display:inline-block;padding:6px 10px;border-radius:999px;background:#e8f1ff;color:var(--brand);font-size:.8rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}.hero h2{margin:12px 0 8px;font-size:2rem}.hero p{margin:8px 0;color:var(--muted)}.hero-grid{display:grid;grid-template-columns:1.3fr .9fr;gap:16px;align-items:start}.card,.step{margin-top:20px;padding:22px;border:1px solid var(--line);border-radius:22px;background:var(--panel);box-shadow:var(--shadow)}.section-title{margin:0 0 10px;font-size:1.45rem}.grid2,.step-grid,.flow{display:grid;gap:14px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.flow{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:14px}.flow div{padding:14px;border:1px solid var(--line);border-radius:16px;background:#f8fbff;font-weight:700;text-align:center}.step-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}.step-head h3{margin:0;font-size:1.5rem}.time{white-space:nowrap;padding:8px 12px;border-radius:999px;background:#eef6ff;border:1px solid #cfe0ff;color:var(--brand);font-weight:700}.step-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:16px;border:1px solid var(--line);border-radius:16px;background:#fbfdff}.panel h4{margin:0 0 10px;font-size:1rem;text-transform:uppercase;letter-spacing:.04em}.do h4{color:var(--do)}.say h4{color:var(--say)}.expect h4{color:var(--expect)}.fallback h4{color:var(--fallback)}.panel p,.panel ul{margin:0;color:var(--ink)}.panel ul{padding-left:18px}.prompt-grid{display:grid;gap:12px}.prompt{padding:14px;border-radius:14px;border:1px solid var(--line);background:#fff}.prompt strong{display:block;margin-bottom:6px;color:var(--brand)}code,pre{font:15px/1.45 Consolas,monospace;background:#0f172a;color:#e2e8f0;border-radius:12px}code{padding:2px 7px}.prompt code{display:block;padding:12px;white-space:pre-wrap}.note{border-left:5px solid var(--accent);padding:14px 16px;background:#fff8cf;border-radius:14px}.timing table{width:100%;border-collapse:collapse}.timing th,.timing td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left}.transition-list{display:grid;gap:10px}.transition-list div{padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fbfdff}.footer{margin-top:26px;color:var(--muted);text-align:center}.print-only{display:none}@media (max-width:1100px){.sidebar{position:static;width:auto;border-right:0;border-bottom:1px solid var(--line)}.main{margin:0;padding:22px}.hero-grid,.grid2,.step-grid,.flow{grid-template-columns:1fr}}@media print{body{background:#fff;font-size:12pt}.sidebar{position:static;width:auto;border-right:0}.main{margin:0;padding:0}.card,.step,.hero,.legend,.meta,.brand{box-shadow:none;break-inside:avoid}.nav{display:none}.print-only{display:block}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="brand">
+    <h1>Presenter Notes</h1>
+    <p>Private cheat sheet for Saurabh. Laptop only; not projected.</p>
+  </div>
+  <nav class="nav" aria-label="Step navigation">
+    <a href="#setup">Pre-demo setup</a>
+    <a href="#timing">Timing guide</a>
+    <a href="#step1">1. ADO work item</a>
+    <a href="#step2">2. GitHub issue</a>
+    <a href="#step3">3. Assign Copilot</a>
+    <a href="#step4">4. Agent branch</a>
+    <a href="#step5">5. Develop enhancement</a>
+    <a href="#step6">6. Commits + tests</a>
+    <a href="#step7">7. Raise PR</a>
+    <a href="#step8">8. Review + approve</a>
+    <a href="#step9">9. Pipeline validates</a>
+    <a href="#step10">10. Merge + deploy</a>
+    <a href="#talking">Key talking points</a>
+    <a href="#transitions">Transition phrases</a>
+  </nav>
+  <div class="legend">
+    <div style="color:var(--do)">🟢 DO</div>
+    <div style="color:var(--say)">🔵 SAY</div>
+    <div style="color:var(--expect)">🟡 EXPECT</div>
+    <div style="color:var(--fallback)">🔴 FALLBACK</div>
+  </div>
+  <div class="meta small">
+    Demo URLs:<br>ADO: https://dev.azure.com/brandsafway1/<br>Repo: github.com/sautalwar/brandsafway-copilot-demo
+  </div>
+</aside>
+<main class="main">
+  <section class="hero">
+    <span class="eyebrow">BrandSafway · Developer Agent Demo</span>
+    <div class="hero-grid">
+      <div>
+        <h2>Repeatable agentic AI demo sequence</h2>
+        <p>Goal: move one business request from Azure DevOps to shipped code while showing GitHub Copilot across VS Code, CLI, and the coding agent. Keep the story practical: same workflow, same controls, faster execution.</p>
+        <div class="flow" aria-hidden="true">
+          <div>1 ADO</div><div>2 Issue</div><div>3-7 AI Work</div><div>8-9 Review/Gates</div><div>10 Merge</div>
+        </div>
+      </div>
+      <div class="note">
+        <strong>Anchor line:</strong> BrandSafway keeps Azure DevOps and GitHub exactly as-is; agentic AI augments the implementation step and stays inside the normal branch, PR, review, and pipeline controls.
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="setup">
+    <h2 class="section-title">Pre-demo setup checklist</h2>
+    <div class="grid2">
+      <div class="panel do"><h4>Environment</h4><ul><li>Sign in to Azure DevOps, GitHub, VS Code, and GitHub Copilot.</li><li>Open repo in VS Code with Copilot Chat visible.</li><li>Open terminal with <code>gh copilot</code> ready.</li><li>Confirm issue assignment permissions for <code>@copilot</code>.</li><li>Have GitHub Actions / ADO pipeline tab preloaded.</li></ul></div>
+      <div class="panel do"><h4>Browser layout</h4><ul><li>Monitor 1 projected: ADO, GitHub, VS Code, pipeline tabs only.</li><li>Monitor 2 private: this notes file.</li><li>Tabs ordered: ADO board → GitHub issues → branch/PR → pipeline.</li><li>Zoom browser to 110–125% for room readability.</li><li>Disable notifications and unrelated tabs.</li></ul></div>
+      <div class="panel expect"><h4>Backup assets</h4><ul><li>One pre-created ADO item tagged <code>copilot-demo</code>.</li><li>One pre-created GitHub issue with <code>AB#</code> reference.</li><li>Prepared branch, commits, PR, approval, and green CI.</li><li>Screenshots of assignment, PR, and pipeline in case latency hits.</li></ul></div>
+      <div class="panel say"><h4>Opening frame</h4><p>“You’re about to watch a normal backlog item go from Azure DevOps into GitHub, get implemented with Copilot, reviewed by a human, validated by the same pipeline, and merged with a full audit trail.”</p></div>
+    </div>
+  </section>
+
+  <section class="card timing" id="timing">
+    <h2 class="section-title">Timing guide (~30–40 min)</h2>
+    <table>
+      <tr><th>Segment</th><th>Minutes</th><th>Notes</th></tr>
+      <tr><td>Intro + challenge/vision</td><td>4-5</td><td>Use customer-facing deck.</td></tr>
+      <tr><td>Steps 1-2</td><td>4-5</td><td>Set business context and traceability.</td></tr>
+      <tr><td>Steps 3-7</td><td>12-15</td><td>Main AI story: assign, branch, code, tests, PR.</td></tr>
+      <tr><td>Steps 8-10</td><td>6-8</td><td>Human oversight, pipeline, merge, close loop.</td></tr>
+      <tr><td>Wrap-up + Q&amp;A</td><td>5-7</td><td>Return to customer-facing deck.</td></tr>
+    </table>
+  </section>
+
+  <section class="step" id="step1">
+    <div class="step-head"><div><h3>Step 1 — ADO Work Item Created</h3><div class="small">Open Azure DevOps Boards and create the user story.</div></div><div class="time">~2-3 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Go to <a href="https://dev.azure.com/brandsafway1/">dev.azure.com/brandsafway1</a>.</li><li>Create User Story: <strong>Add input validation to the Safety Inspection API POST and PUT endpoints</strong>.</li><li>Acceptance criteria: all required fields validated, appropriate error messages returned, unit tests added.</li><li>Tag it <code>copilot-demo</code>.</li><li>Copy the work item ID (example: <code>AB#12345</code>).</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“We start where the business already works: Azure DevOps. This is the governed request that will flow through engineering without changing the toolchain.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>A new user story is visible with an ID such as <code>AB#12345</code>. Pause long enough for the audience to see the title and acceptance criteria.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>If ADO is slow, open a prepared work item and say you are jumping to the saved state to keep focus on the workflow, not the typing.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace We just received a new requirement: add input validation to the Safety Inspection API POST and PUT endpoints. What files do you expect we'll need to touch in this repo?</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot suggest "how do I capture an Azure DevOps work item ID in a GitHub issue body for traceability"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: no assignment yet. Tell the audience the agent enters in Step 3 after the issue exists.</code></div></div></div>
+      <div class="panel"><h4>Transition</h4><p>“Now that the business request exists, let’s bridge it into the GitHub engineering workflow without losing the ADO connection.”</p></div>
+    </div>
+  </section>
+
+  <section class="step" id="step2">
+    <div class="step-head"><div><h3>Step 2 — GitHub Issue Linked to ADO</h3><div class="small">Create the GitHub issue and show bidirectional traceability.</div></div><div class="time">~3 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Open repo <code>sautalwar/brandsafway-copilot-demo</code> → Issues → New issue.</li><li>Title: <strong>Add input validation to POST/PUT inspection endpoints</strong>.</li><li>Body: include the actual <code>AB#12345</code>, acceptance criteria, and business context.</li><li>Show the ADO link resolving on both sides.</li><li>If sync already created an issue, show that instead.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“Azure DevOps remains the system of record. GitHub becomes the execution workspace, and the AB# link gives us a clean audit trail between the two.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>The issue renders with the <code>AB#</code> reference and the ADO item shows the GitHub linkage or external reference.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>If the bidirectional link lags, point at the issue body and explain the integration pattern. Use a prepared issue if needed.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace Draft a concise GitHub issue summary for adding input validation to the inspection POST and PUT endpoints. Include acceptance criteria and mention the linked ADO work item AB#12345.</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot suggest "gh issue create command with a multiline body that includes AB#12345 and acceptance criteria"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: still waiting. Tell the audience the coding agent is most effective once the issue is clear and scoped.</code></div></div></div>
+      <div class="panel"><h4>Transition</h4><p>“With the issue in place, we can assign it the same way we would assign a teammate — except this teammate is an AI coding agent.”</p></div>
+    </div>
+  </section>
+
+  <section class="step" id="step3">
+    <div class="step-head"><div><h3>Step 3 — Copilot/Claude Agent Assigned Issue</h3><div class="small">This is the moment the workflow becomes visibly agentic.</div></div><div class="time">~3 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Assign <code>@copilot</code> on the GitHub issue, or use the coding agent UI.</li><li>Keep the issue visible while explaining what happens next.</li><li>Then switch to VS Code for the workspace-aware prompt.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“We’re now assigning this to the Copilot coding agent. It will read the issue, analyze our codebase, and start working autonomously — but still inside the normal branch and pull request process.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>The issue shows Copilot assigned or queued. Audience should understand this is issue-driven, not a random chat request.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>If assignment is unavailable, show a screenshot or a prepared issue state, then continue to the generated branch and PR to preserve the story.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace What files would need to change to add input validation to the inspection API endpoints?</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot suggest "how to add express-validator middleware to an Express.js API"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: assign @copilot to the GitHub issue and let the agent begin analysis from the issue context.</code></div></div></div>
+      <div class="panel"><h4>Transition</h4><p>“Once assigned, the agent behaves like a contributor: first it creates an isolated branch and starts implementing.”</p></div>
+    </div>
+  </section>
+
+  <section class="step" id="step4">
+    <div class="step-head"><div><h3>Step 4 — Agent Creates Branch</h3><div class="small">Show that the agent follows repo conventions rather than bypassing them.</div></div><div class="time">~2 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Show the new branch, ideally <code>copilot/issue-N-add-input-validation</code>.</li><li>Point out that naming follows the repo convention.</li><li>Mention it read repo context, including <code>.github/copilot-instructions.md</code>.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“Notice the branch naming is consistent. The agent is not freelancing — it is operating inside the repo’s instructions and conventions.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>A branch exists and clearly ties back to the issue. This is a strong auditability moment.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>Use a prepared branch if the live assignment is still progressing. Call out that branch creation is one of the first automated steps.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace Explain the current project structure and how the API routes are organized.</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot explain "git checkout -b copilot/issue-12-add-input-validation"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: show the agent-created branch and say it followed repo instructions automatically.</code></div></div></div>
+      <div class="panel"><h4>Transition</h4><p>“Now let’s inspect the actual work product and layer in the day-to-day Copilot experience developers use in VS Code and the CLI.”</p></div>
+    </div>
+  </section>
+
+  <section class="step" id="step5">
+    <div class="step-head"><div><h3>Step 5 — Agent Develops Enhancement</h3><div class="small">Blend autonomous work with interactive Copilot capabilities.</div></div><div class="time">~5-6 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Open the diff or changed files.</li><li>Type the workspace prompt below in VS Code.</li><li>Highlight validation code and use inline chat for JSDoc.</li><li>Run the CLI explain command.</li><li>Ask for edge cases in chat.</li><li>Optionally start typing a validator and accept Tab completion.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“This is where agentic AI and developer productivity meet. The coding agent handles a scoped implementation, while Copilot in the editor and terminal helps the human inspect, refine, and understand the change.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>Audience sees real code updates plus four Copilot surfaces: completion, inline chat, chat panel, and agent mode.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>If live responses are slow, use the prepared diff and simply read the exact prompts aloud. The prompts themselves still communicate the workflow.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace Add input validation to the POST /api/inspections endpoint. Required fields: site, inspector, date, status. Validate types and return 400 with specific error messages.</code></div><div class="prompt"><strong>VS Code Inline Chat (select code, Cmd+I)</strong><code>Add JSDoc comments explaining the validation rules.</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot explain "what does express-validator do and how does it compare to joi"</code></div><div class="prompt"><strong>VS Code Copilot Chat follow-up</strong><code>@workspace What edge cases should we test for the input validation?</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: show the agent-generated code diff and explain it is working from the assigned issue autonomously.</code></div></div></div>
+      <div class="panel"><h4>Skills to call out</h4><ul><li>Tab completion for boilerplate and repetitive patterns.</li><li>Inline chat for localized refactors or comments.</li><li><code>@workspace</code> for repo-aware reasoning.</li><li>Coding agent for end-to-end task execution.</li></ul></div>
+    </div>
+  </section>
+
+  <section class="step" id="step6">
+    <div class="step-head"><div><h3>Step 6 — Agent Commits Code + Tests</h3><div class="small">Reinforce that quality work includes tests, not just feature code.</div></div><div class="time">~3 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Show branch commits.</li><li>Open the test file and point to validation coverage.</li><li>Call out meaningful commit messages.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“Good AI outcomes are not just faster code generation; they include the same engineering discipline we want from a human developer — tests, clear commits, and reviewable changes.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>The branch contains both application changes and test updates for missing fields, bad types, valid payloads, and empty strings.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>If commits are sparse, focus on the changed files tab and highlight the tests there. The quality message still lands.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace Generate Jest test cases for the input validation on POST /api/inspections. Include tests for: missing required fields, invalid field types, valid input, and edge cases like empty strings.</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot suggest "git command to see what changed in the last commit"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: show the agent's commits and note that it added tests as part of the implementation.</code></div></div></div>
+      <div class="panel"><h4>Transition</h4><p>“Once the work is coded and tested, the handoff happens through the same pull request process your team already trusts.”</p></div>
+    </div>
+  </section>
+
+  <section class="step" id="step7">
+    <div class="step-head"><div><h3>Step 7 — Agent Raises PR</h3><div class="small">Show the structured handoff from AI implementation to human review.</div></div><div class="time">~3 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Open the PR from the agent branch.</li><li>Show description, linked issue, and checks.</li><li>Point out the PR summary if available.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“The agent doesn’t auto-merge. It stops at a pull request and hands the work to a human with a clean summary and a full diff.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>The PR ties back to the issue and includes enough context for a reviewer to quickly understand the change.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>If the PR is not ready live, switch to a prepared PR and explain it is the expected output of the assigned issue workflow.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace Review this PR and summarize the changes for a code reviewer.</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot suggest "gh pr view command to show linked issue, checks, and files changed"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: show the PR raised by the agent with the linked GitHub issue and branch.</code></div></div></div>
+      <div class="panel"><h4>Transition</h4><p>“Now the human lead takes over. AI proposes; humans review and decide.”</p></div>
+    </div>
+  </section>
+
+  <section class="step" id="step8">
+    <div class="step-head"><div><h3>Step 8 — Development Lead Reviews/Approves</h3><div class="small">Make the human control point explicit.</div></div><div class="time">~3 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Walk the diff.</li><li>Ask Copilot about security concerns.</li><li>Leave one review comment.</li><li>Approve the PR.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“The human stays in control. AI assists, humans decide. The review gate is unchanged.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>The PR shows a review comment and approval badge. Use this moment to let compliance stakeholders breathe.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>If review permissions or latency get in the way, show a prepared approved PR and narrate the exact decision point.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace Are there any security concerns with this input validation implementation?</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot explain "gh pr review --approve"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: pause the agent story and explicitly show the human review step as the merge control point.</code></div></div></div>
+      <div class="panel"><h4>Transition</h4><p>“Approval alone is not enough; the same automated quality gates still have to pass.”</p></div>
+    </div>
+  </section>
+
+  <section class="step" id="step9">
+    <div class="step-head"><div><h3>Step 9 — ADO Pipeline Validates</h3><div class="small">Connect AI-generated code to the existing delivery controls.</div></div><div class="time">~3 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Show GitHub Actions CI or the ADO pipeline run.</li><li>Point to test results and lint results.</li><li>Repeat that the gates are identical for AI- and human-written code.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“Same pipeline, same gates. AI-written code goes through identical quality checks as human-written code.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>A run is visible with green checks or an in-progress indicator. Even a queued build still proves the control path.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>If ADO is slow, use GitHub checks immediately and mention the ADO pipeline is the same governed validation stage.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace Based on this change, what tests and checks should the CI pipeline run before merge?</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot suggest "gh pr checks command to show CI status for the current pull request"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: show that agent-authored code still waits on the same protected-branch checks.</code></div></div></div>
+      <div class="panel"><h4>Transition</h4><p>“Once the gates pass, we can merge and close the loop back to the original business request.”</p></div>
+    </div>
+  </section>
+
+  <section class="step" id="step10">
+    <div class="step-head"><div><h3>Step 10 — Merge + Deployment</h3><div class="small">Bring the story back to business value and traceability.</div></div><div class="time">~3 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li>Merge the PR.</li><li>Show the merged state and, if available, deployment kickoff.</li><li>Return to the ADO item and show status updated or traceability completed.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“Full circle: business request to deployed code, with AI augmenting the development step while the governance model stays intact.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><p>The PR is merged and the audience sees a clear path from ADO work item to shipped outcome.</p></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><p>Use a prepared merged PR and completed work item if deployment timing is unpredictable. End on the closed-loop traceability story.</p></div>
+      <div class="panel"><h4>Exact prompts/actions</h4><div class="prompt-grid"><div class="prompt"><strong>VS Code Copilot Chat</strong><code>@workspace Summarize the business impact of this PR in 3 bullets for a delivery manager.</code></div><div class="prompt"><strong>GitHub Copilot CLI</strong><code>gh copilot suggest "gh pr merge command for a reviewed pull request after checks pass"</code></div><div class="prompt"><strong>Copilot coding agent</strong><code>Action: conclude the agent story here; the agent produced a reviewable change, but the merge remains a human-governed action.</code></div></div></div>
+      <div class="panel"><h4>Close on this line</h4><p>“We did not replace your workflow. We accelerated one step inside it — and kept every control your team already relies on.”</p></div>
+    </div>
+  </section>
+
+  <section class="card" id="talking">
+    <h2 class="section-title">Key talking points</h2>
+    <div class="grid2">
+      <div class="panel say"><h4>Agentic AI value</h4><ul><li>Issue-driven execution, not isolated prompting.</li><li>Works inside branches, commits, PRs, reviews, and pipelines.</li><li>Augments developers across IDE, CLI, and autonomous agent surfaces.</li><li>Best for scoped, reviewable work with crisp acceptance criteria.</li></ul></div>
+      <div class="panel expect"><h4>Common objections to pre-answer</h4><ul><li>Security: same repo permissions and gates.</li><li>Quality: tests + review + CI still mandatory.</li><li>Governance: ADO remains the planning/reporting layer.</li><li>Audit trail: AB#, issue, branch, commits, PR, pipeline, merge.</li></ul></div>
+    </div>
+  </section>
+
+  <section class="card" id="transitions">
+    <h2 class="section-title">Transition phrases</h2>
+    <div class="transition-list">
+      <div><strong>Intro → Step 1:</strong> “Let’s start with a normal business request in Azure DevOps.”</div>
+      <div><strong>Step 2 → Step 3:</strong> “Now that engineering has a scoped issue, we can assign it to Copilot.”</div>
+      <div><strong>Step 4 → Step 5:</strong> “The branch is the envelope; now let’s inspect the work inside it.”</div>
+      <div><strong>Step 7 → Step 8:</strong> “This is the critical handoff: AI stops at the PR, humans take it from there.”</div>
+      <div><strong>Step 9 → Step 10:</strong> “If the same gates pass, the same merge process applies.”</div>
+      <div><strong>Wrap-up:</strong> “The outcome is faster implementation without giving up control, traceability, or quality.”</div>
+    </div>
+  </section>
+
+  <p class="footer">Private presenter notes · Offline single-file HTML · Chrome / Edge / Firefox friendly</p>
+</main>
+</body>
+</html>

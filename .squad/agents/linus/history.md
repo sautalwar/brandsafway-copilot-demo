@@ -9,4 +9,7 @@
 - Created `demo-guide.html`, a single-file offline HTML demo guide for the BrandSafway live presentation covering the full Azure DevOps → GitHub Copilot Agent → deployment story.
 - Used a GitHub-dark-inspired visual system with safety-accent colors, collapsible step sections, a live progress indicator, responsive layout, and print support so the guide works both on-screen and as a backup handout.
 - Structured the guide around the required 10-step walkthrough and added Copilot surface coverage, hard-question prep, and fallback messaging to keep the live demo resilient.
+- Split the original guide into two purpose-built offline HTML files: `demo-presenter-notes.html` for Saurabh's private laptop view and `demo-customer-facing.html` for the projected audience experience.
+- Optimized the presenter notes for live delivery with a fixed sidebar, exact VS Code / CLI / coding-agent prompts for every step, detailed fallbacks, timing guidance, and transition lines.
+- Reworked the customer-facing presentation into a dark, slide-like, visual-first narrative with BrandSafway colors and a CSS-only 10-step flow that highlights the AI-powered stages.
 <!-- Append learnings below -->

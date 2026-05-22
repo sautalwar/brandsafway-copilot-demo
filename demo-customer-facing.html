@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BrandSafway Developer Agent Presentation</title>
+<style>
+:root{--bg:#0b1020;--bg2:#1a1a2e;--card:#121a2b;--line:#24304a;--text:#eef3ff;--muted:#9fb0cf;--yellow:#FFD700;--blue:#4da3ff;--green:#33d17a;--shadow:0 18px 44px rgba(0,0,0,.35)}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-snap-type:y mandatory}body{margin:0;font:20px/1.45 Segoe UI,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at top right,rgba(255,215,0,.12),transparent 18%),radial-gradient(circle at top left,rgba(77,163,255,.16),transparent 24%),linear-gradient(180deg,#11172a,#090d18)}section{min-height:100vh;scroll-snap-align:start;padding:6vw 7vw;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}section::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent 45%);pointer-events:none}.kicker{display:inline-block;padding:8px 14px;border:1px solid rgba(255,215,0,.35);border-radius:999px;background:rgba(255,215,0,.08);color:var(--yellow);font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.title{font-size:clamp(2.5rem,6vw,5.6rem);line-height:1.04;margin:.35em 0 .2em}.subtitle{max-width:900px;color:var(--muted);font-size:clamp(1.1rem,2vw,1.45rem)}.brandline{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.chip{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#dbe6ff}.grid2,.grid3,.benefits,.flow{display:grid;gap:18px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3,.benefits{grid-template-columns:repeat(3,minmax(0,1fr))}.card{padding:22px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(18,26,43,.96),rgba(10,15,26,.94));box-shadow:var(--shadow);animation:rise .7s ease both}.card h3{margin:0 0 10px;font-size:1.25rem}.card p,.card li{color:#d9e4ff}.card ul{margin:0;padding-left:20px}.big-quote{max-width:980px;font-size:clamp(1.55rem,3vw,2.7rem);line-height:1.2;font-weight:700}.pain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:28px}.pain .card{text-align:center}.icon{display:inline-flex;width:56px;height:56px;align-items:center;justify-content:center;border-radius:18px;background:rgba(255,215,0,.12);border:1px solid rgba(255,215,0,.25);font-size:1.7rem;margin-bottom:12px}.flow{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:24px}.step{position:relative;padding:18px 14px;border:1px solid var(--line);border-radius:20px;background:rgba(18,26,43,.92);text-align:center;animation:glow 6s ease-in-out infinite}.step strong{display:block;font-size:1rem;margin:10px 0 4px}.step span{font-size:.92rem;color:var(--muted)}.step.ai{border-color:rgba(255,215,0,.45);background:linear-gradient(180deg,rgba(255,215,0,.12),rgba(18,26,43,.95))}.step::after{content:"→";position:absolute;right:-16px;top:50%;transform:translateY(-50%);color:var(--yellow);font-size:28px}.step:nth-child(5)::after,.step:nth-child(10)::after{display:none}.mini-flow{position:absolute;right:7vw;bottom:7vh;width:min(32vw,420px);display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.mini-flow div{padding:10px 6px;border:1px solid var(--line);border-radius:12px;background:rgba(18,26,43,.8);font-size:.75rem;text-align:center}.mini-flow .ai{border-color:rgba(255,215,0,.4);color:var(--yellow)}.cap h3,.benefits h3{color:var(--yellow)}.benefits .card:nth-child(odd){transform:translateY(-6px)}.qa{font-size:clamp(3rem,8vw,6.2rem);font-weight:900;letter-spacing:.05em}.footer-note{position:absolute;left:7vw;bottom:4vh;color:#7f8fb0;font-size:.9rem}@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}@keyframes glow{0%,100%{box-shadow:0 0 0 rgba(255,215,0,0)}50%{box-shadow:0 0 0 1px rgba(255,215,0,.12),0 0 24px rgba(255,215,0,.09)}}@media (max-width:1080px){.grid2,.grid3,.benefits,.pain,.flow{grid-template-columns:1fr}.step::after,.mini-flow{display:none}}@media print{html{scroll-snap-type:none}section{min-height:auto;page-break-after:always;padding:28px;background:#0b1020}.card{box-shadow:none}}
+</style>
+</head>
+<body>
+<section>
+  <span class="kicker">BrandSafway</span>
+  <h1 class="title">Developer Agent:<br>AI-Powered Development with GitHub Copilot + Azure DevOps</h1>
+  <p class="subtitle">A practical workflow for moving from business request to shipped code with AI assistance, human oversight, and a full audit trail.</p>
+  <div class="brandline"><span class="chip">Azure DevOps</span><span class="chip">GitHub</span><span class="chip">GitHub Copilot</span><span class="chip">Safety Inspection API Demo</span></div>
+  <div class="footer-note">Scroll for the full narrative · offline-ready single file</div>
+</section>
+
+<section>
+  <span class="kicker">The Challenge</span>
+  <h2 class="title">Manual handoffs slow delivery</h2>
+  <div class="pain">
+    <div class="card"><div class="icon">🧩</div><h3>Context switching</h3><p>Teams bounce between backlog, code, PRs, and pipelines.</p></div>
+    <div class="card"><div class="icon">🕒</div><h3>Slow first drafts</h3><p>Simple changes still consume senior developer time.</p></div>
+    <div class="card"><div class="icon">🔍</div><h3>Review overload</h3><p>Humans spend time on repetitive implementation details.</p></div>
+    <div class="card"><div class="icon">📎</div><h3>Traceability friction</h3><p>Business intent and code changes are not always tightly linked.</p></div>
+  </div>
+</section>
+
+<section>
+  <span class="kicker">The Vision</span>
+  <p class="big-quote">An AI developer agent that works inside the tools your teams already trust — Azure DevOps for planning, GitHub for execution, Copilot for implementation, with humans still in control.</p>
+  <div class="grid2" style="margin-top:28px">
+    <div class="card"><h3>What changes</h3><p>Issue analysis, code generation, tests, and PR preparation accelerate dramatically.</p></div>
+    <div class="card"><h3>What stays the same</h3><p>Branches, pull requests, reviewers, pipelines, audit trail, and governance.</p></div>
+  </div>
+</section>
+
+<section>
+  <span class="kicker">10-Step Flow</span>
+  <h2 class="title">From request to merge</h2>
+  <div class="flow">
+    <div class="step"><div class="icon">1</div><strong>ADO item</strong><span>Business request logged</span></div>
+    <div class="step"><div class="icon">2</div><strong>GitHub issue</strong><span>Traceability linked</span></div>
+    <div class="step ai"><div class="icon">3</div><strong>Assign agent</strong><span>AI starts analysis</span></div>
+    <div class="step ai"><div class="icon">4</div><strong>Create branch</strong><span>Repo rules followed</span></div>
+    <div class="step ai"><div class="icon">5</div><strong>Develop change</strong><span>Code + prompts</span></div>
+    <div class="step ai"><div class="icon">6</div><strong>Add tests</strong><span>Quality included</span></div>
+    <div class="step ai"><div class="icon">7</div><strong>Raise PR</strong><span>Human handoff</span></div>
+    <div class="step"><div class="icon">8</div><strong>Review</strong><span>Human approves</span></div>
+    <div class="step"><div class="icon">9</div><strong>Pipeline</strong><span>Same gates run</span></div>
+    <div class="step"><div class="icon">10</div><strong>Merge</strong><span>Work delivered</span></div>
+  </div>
+</section>
+
+<section>
+  <span class="kicker">Live Demo</span>
+  <h2 class="title">Let’s see it in action</h2>
+  <p class="subtitle">We’ll now switch to the real tools: Azure DevOps, GitHub, VS Code, GitHub Copilot CLI, and the coding agent workflow.</p>
+  <div class="mini-flow"><div>1</div><div>2</div><div class="ai">3</div><div class="ai">4</div><div class="ai">5</div><div class="ai">6</div><div class="ai">7</div><div>8</div><div>9</div><div>10</div></div>
+</section>
+
+<section>
+  <span class="kicker">GitHub Copilot</span>
+  <h2 class="title">Three complementary surfaces</h2>
+  <div class="grid3 cap">
+    <div class="card"><h3>VS Code</h3><ul><li>Workspace-aware chat</li><li>Inline edits and refactors</li><li>Code completion</li><li>Fast code understanding</li></ul></div>
+    <div class="card"><h3>CLI</h3><ul><li>Command suggestions</li><li>Command explanations</li><li>Terminal-first workflows</li><li>Quick Git/CI help</li></ul></div>
+    <div class="card"><h3>Coding Agent</h3><ul><li>Issue-driven execution</li><li>Branch + PR creation</li><li>Repo context awareness</li><li>Autonomous scoped work</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <span class="kicker">Key Benefits</span>
+  <h2 class="title">Why this matters</h2>
+  <div class="benefits">
+    <div class="card"><div class="icon">⚡</div><h3>Faster delivery</h3><p>Reduce time from issue to reviewable code.</p></div>
+    <div class="card"><div class="icon">✅</div><h3>Consistent quality</h3><p>Tests, PRs, and CI remain part of the path.</p></div>
+    <div class="card"><div class="icon">🛠️</div><h3>Existing tools</h3><p>Works with Azure DevOps and GitHub rather than around them.</p></div>
+    <div class="card"><div class="icon">👤</div><h3>Human oversight</h3><p>Review and merge decisions stay with the team.</p></div>
+    <div class="card"><div class="icon">📜</div><h3>Full audit trail</h3><p>Work item, issue, branch, PR, checks, merge.</p></div>
+    <div class="card"><div class="icon">🧠</div><h3>Higher leverage</h3><p>Developers focus more on judgment and less on boilerplate.</p></div>
+  </div>
+</section>
+
+<section>
+  <span class="kicker">Security &amp; Compliance</span>
+  <h2 class="title">Same controls. New acceleration.</h2>
+  <div class="grid2">
+    <div class="card"><h3>Governance</h3><ul><li>Code stays within your existing engineering environment</li><li>Same review process and protected branches</li><li>Same pipeline gates and evidence</li><li>Full Git-based audit trail</li></ul></div>
+    <div class="card"><h3>Adoption posture</h3><ul><li>Start with a focused pilot</li><li>Use small, scoped issues</li><li>Measure cycle time and review quality</li><li>Expand only where controls and outcomes are strong</li></ul></div>
+  </div>
+</section>
+
+<section>
+  <span class="kicker">Next Steps</span>
+  <h2 class="title">What BrandSafway can do next</h2>
+  <div class="grid3">
+    <div class="card"><h3>1. Pilot</h3><p>Select a low-risk repo and a narrow set of issue types.</p></div>
+    <div class="card"><h3>2. Measure</h3><p>Track cycle time, review effort, and test quality.</p></div>
+    <div class="card"><h3>3. Scale</h3><p>Expand to more teams once controls and value are proven.</p></div>
+  </div>
+</section>
+
+<section>
+  <span class="kicker">Q&amp;A</span>
+  <div class="qa">Questions?</div>
+  <p class="subtitle">Happy to discuss workflow fit, security posture, pilot scope, and where agentic AI can deliver the fastest value.</p>
+</section>
+</body>
+</html>
