@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrandSafway Developer Agent Demo Guide</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel-2: #1f2630;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #9da7b3;
+      --accent: #2f81f7;
+      --accent-2: #3fb950;
+      --warning: #d29922;
+      --danger: #f85149;
+      --highlight: #bc8cff;
+      --safety: #ffd866;
+      --shadow: 0 18px 40px rgba(0,0,0,.35);
+      --radius: 16px;
+      --radius-sm: 12px;
+      --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(47,129,247,.15), transparent 25%),
+        radial-gradient(circle at top left, rgba(255,216,102,.08), transparent 18%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: #79c0ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: var(--max); margin: 0 auto; padding: 24px; }
+    .hero {
+      background: linear-gradient(145deg, rgba(31,38,48,.92), rgba(13,17,23,.96));
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(47,129,247,.12), rgba(63,185,80,.08), rgba(255,216,102,.08));
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; padding: 32px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 999px; font-size: 12px; letter-spacing: .08em;
+      text-transform: uppercase; background: rgba(47,129,247,.12); border: 1px solid rgba(121,192,255,.35);
+      color: #c9d1d9; margin-bottom: 14px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.1; }
+    .subtitle { font-size: clamp(1rem, 2vw, 1.35rem); color: #c9d1d9; margin: 0 0 18px; }
+    .hero-grid {
+      display: grid; grid-template-columns: 1.4fr .9fr; gap: 20px; align-items: start;
+    }
+    .hero p { margin-top: 0; color: var(--text); }
+    .pill-row, .meta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pill, .meta-pill {
+      border: 1px solid var(--border); background: rgba(13,17,23,.7); color: var(--text);
+      border-radius: 999px; padding: 8px 12px; font-size: 13px;
+    }
+    .meta-card {
+      border: 1px solid var(--border); background: rgba(13,17,23,.55);
+      padding: 18px; border-radius: 18px;
+    }
+    .meta-card h3 { margin: 0 0 12px; font-size: 1rem; }
+    .meta-card ul { margin: 0; padding-left: 18px; color: #c9d1d9; }
+    section { margin-top: 28px; }
+    .section-card {
+      background: rgba(22,27,34,.92); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);
+    }
+    .section-title { margin: 0 0 8px; font-size: 1.65rem; }
+    .section-intro { margin: 0 0 20px; color: var(--muted); }
+    .flow {
+      display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 18px;
+    }
+    .flow-step {
+      min-height: 110px; padding: 14px; border-radius: 16px; border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(47,129,247,.08), rgba(13,17,23,.75));
+      position: relative;
+    }
+    .flow-step:nth-child(odd) { background: linear-gradient(180deg, rgba(255,216,102,.07), rgba(13,17,23,.75)); }
+    .flow-step::after {
+      content: "→"; position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+      color: var(--accent); font-size: 22px;
+    }
+    .flow-step:nth-child(5)::after, .flow-step:nth-child(10)::after { display: none; }
+    .flow-step .num {
+      display: inline-flex; width: 30px; height: 30px; border-radius: 50%; align-items: center; justify-content: center;
+      background: rgba(47,129,247,.2); border: 1px solid rgba(121,192,255,.35); margin-bottom: 10px; font-weight: 700;
+    }
+    .flow-step strong { display: block; margin-bottom: 6px; }
+    .flow-step span { color: var(--muted); font-size: 13px; }
+    .checklist {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px;
+    }
+    .check {
+      display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px;
+      background: rgba(13,17,23,.72); border: 1px solid var(--border); border-radius: 14px;
+    }
+    .check input { width: 18px; height: 18px; accent-color: var(--accent-2); margin-top: 2px; }
+    .progress-shell {
+      position: sticky; top: 0; z-index: 10; backdrop-filter: blur(10px); margin: 28px 0 18px;
+      background: rgba(13,17,23,.88); border: 1px solid var(--border); border-radius: 18px; padding: 16px;
+    }
+    .progress-top { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .progress-title { font-weight: 700; }
+    .progress-sub { color: var(--muted); font-size: 14px; }
+    .bar {
+      height: 10px; background: #21262d; border-radius: 999px; overflow: hidden; margin: 12px 0 14px;
+      border: 1px solid var(--border);
+    }
+    .bar-fill {
+      width: 10%; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--safety));
+      transition: width .25s ease;
+    }
+    .dots {
+      display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 8px;
+    }
+    .dot {
+      text-align: center; padding: 8px 4px; border-radius: 12px; border: 1px solid var(--border);
+      background: rgba(22,27,34,.85); font-size: 12px; color: var(--muted); transition: .25s ease;
+    }
+    .dot.active { color: var(--text); border-color: rgba(121,192,255,.45); background: rgba(47,129,247,.18); }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    button {
+      appearance: none; border: 1px solid var(--border); background: #21262d; color: var(--text);
+      padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: 600;
+    }
+    button:hover { background: #30363d; }
+    .steps { display: grid; gap: 14px; }
+    details.step {
+      border: 1px solid var(--border); border-radius: 16px; background: rgba(22,27,34,.92);
+      overflow: hidden; box-shadow: var(--shadow);
+    }
+    details.step[open] { border-color: rgba(121,192,255,.4); }
+    summary {
+      list-style: none; cursor: pointer; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background: linear-gradient(90deg, rgba(47,129,247,.08), rgba(22,27,34,.96));
+    }
+    summary::-webkit-details-marker { display: none; }
+    .step-head { display: flex; gap: 16px; align-items: center; }
+    .step-num {
+      width: 42px; height: 42px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, rgba(47,129,247,.24), rgba(255,216,102,.16));
+      border: 1px solid rgba(121,192,255,.35); font-weight: 800; font-size: 1.05rem;
+    }
+    .step-title-wrap h3 { margin: 0 0 3px; font-size: 1.2rem; }
+    .step-title-wrap p { margin: 0; color: var(--muted); font-size: 14px; }
+    .time-badge {
+      white-space: nowrap; padding: 8px 10px; border-radius: 999px; background: rgba(63,185,80,.14);
+      border: 1px solid rgba(63,185,80,.35); font-size: 13px; color: #c3f0ca;
+    }
+    .step-body { padding: 18px 20px 22px; }
+    .grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
+    }
+    .block {
+      padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); background: rgba(13,17,23,.72);
+    }
+    .block h4 {
+      margin: 0 0 8px; font-size: .92rem; letter-spacing: .04em; text-transform: uppercase;
+    }
+    .where h4 { color: #79c0ff; }
+    .do h4 { color: #c297ff; }
+    .say h4 { color: #7ee787; }
+    .expect h4 { color: #ffd866; }
+    .fallback h4 { color: #ffaba8; }
+    .block p, .block ul { margin: 0; color: #d0d7de; }
+    .block ul { padding-left: 18px; }
+    code, pre {
+      font-family: Consolas, SFMono-Regular, Menlo, monospace;
+      background: rgba(1,4,9,.82); border: 1px solid #30363d; border-radius: 10px;
+    }
+    code { padding: 2px 6px; }
+    pre { padding: 14px; overflow-x: auto; white-space: pre-wrap; }
+    .cap-grid, .qa-grid, .fallback-grid, .mini-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+    }
+    .card {
+      background: rgba(13,17,23,.74); border: 1px solid var(--border); border-radius: 16px; padding: 18px;
+    }
+    .card h3, .card h4 { margin-top: 0; }
+    .card ul { margin: 0; padding-left: 18px; color: #d0d7de; }
+    .callout {
+      border-left: 4px solid var(--safety); padding: 14px 16px; background: rgba(210,153,34,.12);
+      border-radius: 12px; color: #f0f6fc; margin-top: 14px;
+    }
+    .qa-item {
+      border: 1px solid var(--border); border-radius: 14px; background: rgba(13,17,23,.72); padding: 0;
+    }
+    .qa-item summary { background: transparent; padding: 16px; }
+    .qa-item .answer { padding: 0 16px 16px; color: #d0d7de; }
+    .small { font-size: 13px; color: var(--muted); }
+    .footer-note { text-align: center; color: var(--muted); font-size: 13px; padding: 24px 0 10px; }
+    @media (max-width: 960px) {
+      .hero-grid, .flow, .checklist, .grid, .cap-grid, .qa-grid, .fallback-grid, .mini-grid { grid-template-columns: 1fr; }
+      .flow-step::after { display: none; }
+      summary { align-items: flex-start; }
+      .step-head { align-items: flex-start; }
+      .dots { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    }
+    @media print {
+      body { background: #fff; color: #000; }
+      .container { max-width: 100%; padding: 0; }
+      .hero, .section-card, details.step, .progress-shell { box-shadow: none; background: #fff; color: #000; border-color: #999; }
+      .eyebrow, .pill, .meta-pill, .time-badge, button, .bar, .dots { color: #000; background: #fff; border-color: #999; }
+      .toolbar { display: none; }
+      a { color: #000; text-decoration: underline; }
+      .block, .card, .check, .qa-item, .meta-card { background: #fff; color: #000; border-color: #bbb; }
+      .section-intro, .step-title-wrap p, .small, .footer-note { color: #333; }
+      code, pre { background: #f5f5f5; color: #000; }
+      .progress-shell { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">⚙️ Live Demo Guide • BrandSafway • Azure DevOps + GitHub Copilot</div>
+        <div class="hero-grid">
+          <div>
+            <h1>BrandSafway Developer Agent Demo</h1>
+            <p class="subtitle">End-to-End: Azure DevOps → GitHub Copilot Agent → Deployment</p>
+            <p>This demo shows how a standard BrandSafway work item can begin in Azure DevOps, flow into GitHub for execution, and then be completed with GitHub Copilot acting as a developer agent inside the normal engineering workflow. The audience should see that AI is not a sidecar toy — it participates in the same issue, branch, pull request, review, and pipeline model the team already trusts. The story emphasizes human control, auditability, and compatibility with existing Azure DevOps governance. Keep the pace brisk, narrate the business outcome at each transition, and use the fallback paths confidently if any live step slows down.</p>
+            <div class="pill-row">
+              <span class="pill">ADO Org: <a href="https://dev.azure.com/brandsafway1/">brandsafway1</a></span>
+              <span class="pill">Repo: <a href="https://github.com/sautalwar/brandsafway-copilot-demo">sautalwar/brandsafway-copilot-demo</a></span>
+              <span class="pill">App: Node.js / Express Safety Inspection Tracker API</span>
+            </div>
+          </div>
+          <aside class="meta-card">
+            <h3>Audience outcome</h3>
+            <ul>
+              <li>See ADO stay as the system of record for business work.</li>
+              <li>See GitHub Copilot assist developers across VS Code, CLI, and coding agent flows.</li>
+              <li>See that human review and pipeline gates remain mandatory.</li>
+              <li>Leave with a clear mental model for piloting this in BrandSafway teams.</li>
+            </ul>
+            <div class="callout"><strong>Demo posture:</strong> industrial, practical, low-hype. Emphasize safety, control, traceability, and the fact that the existing workflow still governs the outcome.</div>
+          </aside>
+        </div>
+      </div>
+    </header>
+
+    <section class="section-card">
+      <h2 class="section-title">1) Title &amp; Overview</h2>
+      <p class="section-intro">Use this visual to orient the audience before you start clicking. Tell them they are about to watch one backlog item move through the full delivery lifecycle.</p>
+      <div class="flow">
+        <div class="flow-step"><div class="num">1</div><strong>ADO Work Item</strong><span>User story or bug added to backlog</span></div>
+        <div class="flow-step"><div class="num">2</div><strong>GitHub Issue Link</strong><span>AB# link connects business intent and engineering work</span></div>
+        <div class="flow-step"><div class="num">3</div><strong>Assign Copilot</strong><span>Coding agent is assigned like a contributor</span></div>
+        <div class="flow-step"><div class="num">4</div><strong>Agent Branch</strong><span>Feature branch created automatically</span></div>
+        <div class="flow-step"><div class="num">5</div><strong>Develop Change</strong><span>Agent and developer tools produce code updates</span></div>
+        <div class="flow-step"><div class="num">6</div><strong>Code + Tests</strong><span>Commits show feature and validation coverage</span></div>
+        <div class="flow-step"><div class="num">7</div><strong>PR Raised</strong><span>Pull request is opened with linked context</span></div>
+        <div class="flow-step"><div class="num">8</div><strong>Human Review</strong><span>Lead reviews, comments, approves</span></div>
+        <div class="flow-step"><div class="num">9</div><strong>ADO Pipeline</strong><span>Existing quality gates validate the change</span></div>
+        <div class="flow-step"><div class="num">10</div><strong>Merge + Deploy</strong><span>PR merges and work item closes the loop</span></div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 class="section-title">2) Pre-Demo Checklist</h2>
+      <p class="section-intro">Complete these before the audience joins. Check items live if you want a calm opening minute.</p>
+      <div class="checklist">
+        <label class="check"><input type="checkbox"><span>Azure DevOps portal open (<a href="https://dev.azure.com/brandsafway1/">https://dev.azure.com/brandsafway1/</a>)</span></label>
+        <label class="check"><input type="checkbox"><span>GitHub repo open (<a href="https://github.com/sautalwar/brandsafway-copilot-demo">sautalwar/brandsafway-copilot-demo</a>)</span></label>
+        <label class="check"><input type="checkbox"><span>VS Code open with the repo loaded</span></label>
+        <label class="check"><input type="checkbox"><span>GitHub Copilot extension installed and signed in</span></label>
+        <label class="check"><input type="checkbox"><span>GitHub Copilot CLI installed (<code>gh copilot</code>)</span></label>
+        <label class="check"><input type="checkbox"><span>Terminal open</span></label>
+        <label class="check"><input type="checkbox"><span>Browser tabs arranged: <strong>ADO Board | GitHub Repo | GitHub Actions | ADO Pipeline</strong></span></label>
+      </div>
+      <div class="callout"><strong>Recommended prep:</strong> Have one backup ADO work item, one backup issue, one pre-created agent branch, one pre-opened PR, and screenshots of any pipeline screens that might take too long to refresh live.</div>
+    </section>
+
+    <section class="progress-shell" aria-label="Demo progress">
+      <div class="progress-top">
+        <div>
+          <div class="progress-title">3) 10-Step Demo Walkthrough</div>
+          <div class="progress-sub" id="progressLabel">Current focus: Step 1 — ADO Work Item Created</div>
+        </div>
+        <div class="meta-row">
+          <span class="meta-pill">Target runtime: 18-22 minutes</span>
+          <span class="meta-pill">Tip: open one section at a time</span>
+        </div>
+      </div>
+      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+      <div class="dots" id="dots"></div>
+      <div class="toolbar">
+        <button type="button" id="expandAll">Expand all steps</button>
+        <button type="button" id="collapseAll">Collapse all steps</button>
+        <button type="button" onclick="window.print()">Print backup copy</button>
+      </div>
+    </section>
+
+    <section class="steps" id="steps">
+      <details class="step" data-step="1" open>
+        <summary>
+          <div class="step-head">
+            <div class="step-num">1</div>
+            <div class="step-title-wrap">
+              <h3>ADO Work Item Created</h3>
+              <p>Start in the familiar system the BrandSafway team already uses.</p>
+            </div>
+          </div>
+          <span class="time-badge">~2 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>Azure DevOps Boards → Backlogs</p></div>
+            <div class="block do"><h4>[DO]</h4><p>Create a new User Story or Bug titled <strong>“Add input validation to Safety Inspection API”</strong>. If helpful, add acceptance criteria such as validating required fields, returning clear error messages, and covering invalid payloads.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“Here’s our standard workflow — a work item is created in Azure DevOps, just like your teams do today. This represents real work that needs to happen.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>The work item appears in the backlog with an ID such as <code>#12345</code>.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Use a pre-created work item and say you are skipping the typing to save time.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>Pause on the ID number — you will reference it in the next step.</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="2">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">2</div>
+            <div class="step-title-wrap">
+              <h3>GitHub Issue Linked to ADO</h3>
+              <p>Show the bridge between business tracking and technical execution.</p>
+            </div>
+          </div>
+          <span class="time-badge">~2 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>GitHub → Issues in <code>sautalwar/brandsafway-copilot-demo</code></p></div>
+            <div class="block do"><h4>[DO]</h4><p>Show the linked GitHub issue. If it does not exist yet, create one and include <code>AB#12345</code> in the body using the actual ADO ID from step 1.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“The work item in ADO is linked to a GitHub issue. This bridge is key — ADO tracks the business intent, GitHub tracks the technical execution. The AB# syntax creates a bidirectional link.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>The issue is visible with the ADO reference in the body or timeline.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Create the issue manually live with the AB# reference and mention that the syntax is the integration handshake.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>Connect the idea to governance: ADO remains the top-level tracker, GitHub becomes the execution workspace.</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="3">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">3</div>
+            <div class="step-title-wrap">
+              <h3>Copilot Agent Assigned Issue</h3>
+              <p>Shift from human pickup to AI-assisted execution.</p>
+            </div>
+          </div>
+          <span class="time-badge">~2 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>GitHub Issue view</p></div>
+            <div class="block do"><h4>[DO]</h4><p>Assign <code>@copilot</code> to the issue, or show the Copilot coding agent assignment state if already in progress.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“Now here’s where the magic happens. Instead of a developer picking up this issue, we assign it to the GitHub Copilot coding agent. It reads the issue, understands the codebase, and starts working.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>The issue shows Copilot as the assignee or indicates the coding agent has started work.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Use a pre-recorded screenshot of the assignment or narrate the expected state while switching to a branch or PR already produced by the agent.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>Keep the message grounded: the agent is acting like a contributor inside the normal repo workflow, not bypassing it.</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="4">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">4</div>
+            <div class="step-title-wrap">
+              <h3>Agent Creates Branch</h3>
+              <p>Show standard Git discipline, just automated.</p>
+            </div>
+          </div>
+          <span class="time-badge">~1.5 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>GitHub Repo → Branches</p></div>
+            <div class="block do"><h4>[DO]</h4><p>Show the feature branch created by the agent, for example <code>copilot/issue-N-add-input-validation</code>.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“The agent follows the same workflow as any developer — it creates a feature branch. This isn’t magic, it’s standard Git workflow, automated.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>A new branch appears following the Copilot naming convention.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Show a pre-created branch and explain that branch creation is one of the first automated actions after the issue is assigned.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>This is a good moment to reinforce auditability: the branch is visible, inspectable, and isolated.</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="5">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">5</div>
+            <div class="step-title-wrap">
+              <h3>Agent Develops Enhancement</h3>
+              <p>Blend coding agent output with day-to-day Copilot experiences in VS Code and CLI.</p>
+            </div>
+          </div>
+          <span class="time-badge">~3 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>VS Code editor and source control view, or GitHub file diff. Then switch briefly to the terminal.</p></div>
+            <div class="block do"><h4>[DO]</h4><ul><li>Show the code changes implementing request validation in the Express API.</li><li>Demo Copilot in VS Code with inline completion and the chat panel.</li><li>Run CLI examples:<br><pre>gh copilot suggest "how to add express-validator"
+gh copilot explain "what does this middleware do"</pre></li></ul></div>
+            <div class="block say"><h4>[SAY]</h4><p>“The agent analyzed the codebase, found the TODO comments, and implemented input validation. Let me also show you how developers interact with Copilot day-to-day in VS Code and the CLI.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>Clean, well-structured code changes, validation middleware, and useful Copilot assistance across editor and terminal surfaces.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Walk through pre-committed code changes and use static CLI command examples if live suggestions are slow.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>Bridge the agent story to developer productivity: the agent handles whole tasks, while Copilot in VS Code/CLI helps humans with daily coding work.</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="6">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">6</div>
+            <div class="step-title-wrap">
+              <h3>Agent Commits Code + Tests</h3>
+              <p>Highlight quality, not just speed.</p>
+            </div>
+          </div>
+          <span class="time-badge">~1.5 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>GitHub branch → Commits and changed files</p></div>
+            <div class="block do"><h4>[DO]</h4><p>Show 1–2 commits with meaningful messages and point out both application code and test file changes.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“Notice it didn’t just write the feature — it wrote tests too. This is a key part of code quality. The agent follows the same standards we’d expect from any developer.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>Commits are visible and the diff shows validation logic plus tests or test scaffolding.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Use pre-committed changes and call out the quality bar explicitly even if you skip opening every file.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>Emphasize that speed without quality is not useful in safety-sensitive environments.</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="7">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">7</div>
+            <div class="step-title-wrap">
+              <h3>Agent Raises PR</h3>
+              <p>Demonstrate handoff into the human review stage.</p>
+            </div>
+          </div>
+          <span class="time-badge">~2 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>GitHub → Pull Requests</p></div>
+            <div class="block do"><h4>[DO]</h4><p>Open the PR created by the agent. Show the description, linked issue, changed files, and CI status.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“The agent opens a pull request, links it to the issue, writes a clear description of what changed and why. It’s ready for human review.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>The PR includes linked context, a readable summary, and checks beginning to run or already green.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Create the PR manually from the prepared branch or switch to a pre-created PR for the walkthrough.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>Say “ready for review, not auto-merged.” That helps answer control questions before they are asked.</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="8">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">8</div>
+            <div class="step-title-wrap">
+              <h3>Development Lead Reviews/Approves</h3>
+              <p>Human stays accountable for the merge decision.</p>
+            </div>
+          </div>
+          <span class="time-badge">~2 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>GitHub PR review interface</p></div>
+            <div class="block do"><h4>[DO]</h4><p>Walk the diff, leave a comment on one changed line, then approve the PR. If appropriate, mention that reviewers can also request changes.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“This is where the human stays in control. The development lead reviews the code, just like they would for any team member. They can request changes, add comments, or approve.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>A review comment is visible and the PR shows an approval badge.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Use a prepared PR that already has comments and approval. Narrate the same control point.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>This is the trust anchor of the entire demo: AI contributes, humans remain accountable.</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="9">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">9</div>
+            <div class="step-title-wrap">
+              <h3>ADO Pipeline Validates</h3>
+              <p>Existing quality gates still apply.</p>
+            </div>
+          </div>
+          <span class="time-badge">~2 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>Azure DevOps Pipelines, or GitHub checks if ADO is slow to refresh</p></div>
+            <div class="block do"><h4>[DO]</h4><p>Show the PR validation pipeline running or passed. If ADO is delayed, show GitHub Actions or GitHub checks as the immediate proxy for CI signal.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“The existing ADO pipeline validates the PR — runs tests, checks code quality, everything your team already has in place. The agent’s code goes through the exact same gates as human-written code.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>A pipeline run is visible with status badges, test results, or green checks.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Use GitHub Actions CI results as the alternative view and keep a screenshot of the ADO pipeline ready.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>This is where security and compliance audiences usually lean in. Say “same pipeline, same policies, same evidence.”</p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="step" data-step="10">
+        <summary>
+          <div class="step-head">
+            <div class="step-num">10</div>
+            <div class="step-title-wrap">
+              <h3>Merge + Deployment</h3>
+              <p>Close the loop from request to delivered value.</p>
+            </div>
+          </div>
+          <span class="time-badge">~2 min</span>
+        </summary>
+        <div class="step-body">
+          <div class="grid">
+            <div class="block where"><h4>[WHERE]</h4><p>GitHub PR merge view, then Azure DevOps work item</p></div>
+            <div class="block do"><h4>[DO]</h4><p>Merge the PR. Then show the ADO work item update to <strong>Done</strong> or <strong>Resolved</strong>. If you have a deployment pipeline wired, point to the run kickoff or completed deployment signal.</p></div>
+            <div class="block say"><h4>[SAY]</h4><p>“We merge, the deployment pipeline runs, and the work item in ADO is automatically updated. Full circle — from business request to production deployment, with AI assistance at the development step.”</p></div>
+            <div class="block expect"><h4>[EXPECT]</h4><p>The PR is merged and the linked ADO work item reflects completion.</p></div>
+            <div class="block fallback"><h4>[FALLBACK]</h4><p>Show a completed merge from a prepared PR and manually update or open the already-closed ADO item.</p></div>
+            <div class="block"><h4>Presenter note</h4><p>End here with a business outcome statement: the workflow got faster without changing the governance model.</p></div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section-card">
+      <h2 class="section-title">4) GitHub Copilot Capabilities Showcase</h2>
+      <p class="section-intro">Use this section if someone asks “what exactly can Copilot do for my developers?” Keep it practical and tie everything back to the inspection API example.</p>
+      <div class="cap-grid">
+        <div class="card">
+          <h3>VS Code</h3>
+          <ul>
+            <li><strong>Code completion:</strong> start typing middleware or validation code and Tab to accept.</li>
+            <li><strong>Copilot Chat:</strong> ask questions about the codebase, dependencies, or next implementation steps.</li>
+            <li><strong>Inline chat:</strong> select code and use inline chat to refactor, explain, or add validation.</li>
+            <li><strong>Agent mode:</strong> use workspace-aware prompts for fixes, tests, or broader changes.</li>
+          </ul>
+          <pre>// Examples to say or type
+"Add request validation for safety inspection payloads"
+"Generate tests for invalid inspection input"</pre>
+        </div>
+        <div class="card">
+          <h3>CLI</h3>
+          <ul>
+            <li><code>gh copilot suggest</code> for shell command guidance.</li>
+            <li><code>gh copilot explain</code> for translating commands or code into plain English.</li>
+            <li>Useful when developers stay in the terminal for Git, Node, CI, and troubleshooting.</li>
+          </ul>
+          <pre>gh copilot suggest "run node tests for changed files"
+gh copilot suggest "create a branch and open a pull request"
+gh copilot explain "npm install express-validator"</pre>
+        </div>
+        <div class="card">
+          <h3>Copilot Coding Agent</h3>
+          <ul>
+            <li>Works from an assigned issue and repository context.</li>
+            <li>Creates branches, implements changes, and opens pull requests.</li>
+            <li>Best for scoped, reviewable work with clear acceptance criteria.</li>
+            <li>Still requires human review, repo permissions, and existing CI/CD guardrails.</li>
+          </ul>
+          <div class="callout"><strong>Setup note:</strong> if asked about enablement, mention the repo and organization need Copilot coding agent prerequisites and workflow configuration such as <code>copilot-setup-steps.yml</code> or equivalent governance setup.</div>
+        </div>
+      </div>
+      <div class="mini-grid" style="margin-top:14px;">
+        <div class="card">
+          <h4>Best practices</h4>
+          <ul>
+            <li>Use clear issue titles and acceptance criteria.</li>
+            <li>Prefer small, reviewable tasks over giant epics.</li>
+            <li>Keep branch protection and required reviews enabled.</li>
+            <li>Use pipelines and tests as non-negotiable gates.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Limitations</h4>
+          <ul>
+            <li>Agent quality depends on issue clarity and repo context.</li>
+            <li>It should not be trusted to merge without review.</li>
+            <li>Complex architecture decisions still need humans.</li>
+            <li>Slow or flaky environments can delay the live experience.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>When to use agent vs. human</h4>
+          <ul>
+            <li><strong>Agent:</strong> validation, tests, refactors, docs, repetitive fixes.</li>
+            <li><strong>Human:</strong> domain trade-offs, cross-team decisions, sensitive logic, production sign-off.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 class="section-title">5) Q&amp;A Preparation</h2>
+      <p class="section-intro">These are the hard questions to answer with calm, practical language.</p>
+      <div class="qa-grid">
+        <details class="qa-item" open>
+          <summary><strong>How does this work with our existing ADO workflow?</strong></summary>
+          <div class="answer">ADO continues to hold the business work item and governance trail. GitHub handles engineering execution, and the AB# linkage creates traceability between the two. The point is not to replace ADO — it is to let AI participate in the developer workflow while ADO remains the planning and reporting layer.</div>
+        </details>
+        <details class="qa-item">
+          <summary><strong>What about security — can the agent access secrets?</strong></summary>
+          <div class="answer">Treat the agent like any other contributor with controlled permissions. It works inside repository and workflow permissions already granted by the organization. Secrets should remain in approved secret stores and pipelines; the agent should not be given broad, unmanaged access outside normal policy boundaries.</div>
+        </details>
+        <details class="qa-item">
+          <summary><strong>What if the agent writes bad code?</strong></summary>
+          <div class="answer">That is exactly why branch protection, pull requests, reviews, tests, and pipeline gates stay in place. The agent can accelerate first-pass delivery, but it does not bypass human review. Bad code is caught the same way bad human code is caught — through process and controls.</div>
+        </details>
+        <details class="qa-item">
+          <summary><strong>How much does this cost?</strong></summary>
+          <div class="answer">Position cost as a trade-off against engineering throughput, cycle time, and repetitive work. Exact pricing depends on the Copilot plan and licensing model, but the business conversation should focus on reduced time-to-merge and the ability to keep developers focused on higher-value tasks.</div>
+        </details>
+        <details class="qa-item">
+          <summary><strong>Can we control what the agent has access to?</strong></summary>
+          <div class="answer">Yes — access is governed by repository permissions, organization settings, and the workflows you allow it to use. Start with a pilot repo, protected branches, required reviewers, and small-scope issues. Expand only after the controls and outcomes are acceptable.</div>
+        </details>
+        <details class="qa-item">
+          <summary><strong>Does this replace developers?</strong></summary>
+          <div class="answer">No. The best framing is that it removes low-leverage effort so developers can spend more time on architecture, safety-critical decisions, integrations, and business context. In this demo the human still defines the task, reviews the code, and approves the merge.</div>
+        </details>
+        <details class="qa-item">
+          <summary><strong>What about compliance and audit trails?</strong></summary>
+          <div class="answer">This workflow improves auditability because every stage is visible: ADO work item, linked GitHub issue, branch, commits, PR comments, approvals, and pipeline evidence. It is easier to explain than invisible AI usage because the work happens inside the normal delivery systems.</div>
+        </details>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h2 class="section-title">6) Fallback Plan Summary</h2>
+      <p class="section-intro">If the live path slows down, move confidently to the nearest proof point. The audience cares more about the workflow than whether every page refreshes in real time.</p>
+      <div class="fallback-grid">
+        <div class="card">
+          <h3>Platform fallback</h3>
+          <ul>
+            <li>If ADO is slow, show GitHub issue, PR, and checks first.</li>
+            <li>If GitHub is slow, use screenshots and narrate the expected transitions.</li>
+            <li>If internet is unstable, use this printed HTML guide as the storyline backup.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Content fallback</h3>
+          <ul>
+            <li>Use pre-created ADO item and issue.</li>
+            <li>Use pre-created branch and PR.</li>
+            <li>Use pre-approved review and completed CI run.</li>
+            <li>Use a completed ADO item to show the end state.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Message fallback</h3>
+          <ul>
+            <li>Keep repeating: same workflow, same controls, faster execution.</li>
+            <li>Emphasize human review over AI autonomy.</li>
+            <li>Focus on traceability from backlog to deployment.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout"><strong>One-line rescue script:</strong> “Rather than wait on a page refresh, let me show you the exact end state the team would review — the important part is that ADO, GitHub, and Copilot all stay inside the same governed workflow.”</div>
+    </section>
+
+    <p class="footer-note">Prepared for Saurabh • BrandSafway live demo • Single-file offline guide for Chrome, Edge, and Firefox</p>
+  </div>
+
+  <script>
+    const steps = Array.from(document.querySelectorAll('details.step'));
+    const dots = document.getElementById('dots');
+    const progressLabel = document.getElementById('progressLabel');
+    const barFill = document.getElementById('barFill');
+    const titles = steps.map(step => step.querySelector('h3').textContent.trim());
+
+    titles.forEach((title, index) => {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      dot.textContent = `${index + 1}. ${title.replace('Development Lead Reviews/Approves', 'Lead Review').replace('Agent Commits Code + Tests', 'Code + Tests')}`;
+      dot.addEventListener('click', () => {
+        steps[index].open = true;
+        steps[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        updateProgress(index + 1);
+      });
+      dots.appendChild(dot);
+    });
+
+    function updateProgress(stepNumber) {
+      const bounded = Math.min(10, Math.max(1, stepNumber || 1));
+      progressLabel.textContent = `Current focus: Step ${bounded} — ${titles[bounded - 1]}`;
+      barFill.style.width = `${bounded * 10}%`;
+      Array.from(dots.children).forEach((dot, index) => dot.classList.toggle('active', index === bounded - 1));
+    }
+
+    steps.forEach(step => {
+      step.addEventListener('toggle', () => {
+        if (step.open) {
+          updateProgress(Number(step.dataset.step));
+        }
+      });
+    });
+
+    document.getElementById('expandAll').addEventListener('click', () => steps.forEach(step => step.open = true));
+    document.getElementById('collapseAll').addEventListener('click', () => {
+      steps.forEach((step, index) => step.open = index === 0);
+      updateProgress(1);
+    });
+
+    let printState = [];
+    window.addEventListener('beforeprint', () => {
+      printState = steps.map(step => step.open);
+      steps.forEach(step => step.open = true);
+    });
+    window.addEventListener('afterprint', () => {
+      steps.forEach((step, index) => step.open = printState[index]);
+    });
+
+    updateProgress(1);
+  </script>
+</body>
+</html>

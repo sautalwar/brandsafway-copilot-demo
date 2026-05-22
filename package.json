@@ -1,0 +1,35 @@
+{
+  "name": "brandsafway",
+  "version": "1.0.0",
+  "description": "Safety inspection tracker API demo for BrandSafway.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "test": "jest --runInBand",
+    "lint": "node -e \"console.log('TODO: Add linting configuration')\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sautalwar/brandsafway-copilot-demo.git"
+  },
+  "keywords": [
+    "express",
+    "brandsafway",
+    "safety",
+    "api"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sautalwar/brandsafway-copilot-demo/issues"
+  },
+  "homepage": "https://github.com/sautalwar/brandsafway-copilot-demo#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2",
+    "supertest": "^7.2.2"
+  }
+}
