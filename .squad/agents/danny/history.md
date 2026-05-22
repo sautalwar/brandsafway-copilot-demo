@@ -7,3 +7,5 @@
 
 ## Learnings
 <!-- Append learnings below -->
+- Mapped the live demo backlog directly to the API's existing TODO markers in `src/app.js` and `tests/inspections.test.js` so the coding agent can pick up realistic, staged enhancements.
+- Pre-staged four GitHub issues aligned to validation, query support, centralized error handling/logging, and edge-case test coverage for the Safety Inspection Tracker API.
