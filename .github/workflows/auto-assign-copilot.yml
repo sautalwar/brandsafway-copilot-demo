@@ -54,10 +54,11 @@ jobs:
           echo "Should assign Copilot: $should_assign"
 
       # Step B: Assign the built-in Copilot coding agent to the issue.
+      # Note: Assigning agents requires a PAT — GitHub App installation tokens are not supported.
       - name: Assign Copilot to the issue
         if: steps.label-check.outputs.should_assign == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.SAUTALWAR_GITHUB_TOKEN }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           REPOSITORY: ${{ github.repository }}
         run: gh issue edit "$ISSUE_NUMBER" --repo "$REPOSITORY" --add-assignee copilot
