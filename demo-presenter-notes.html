@@ -27,6 +27,7 @@
     <a href="#step8">8. Review + approve</a>
     <a href="#step9">9. Pipeline validates</a>
     <a href="#step10">10. Merge + deploy</a>
+    <a href="#step11">11. GHAS bonus</a>
     <a href="#talking">Key talking points</a>
     <a href="#transitions">Transition phrases</a>
   </nav>
@@ -57,6 +58,15 @@
     </div>
   </section>
 
+  <section class="card" id="paths">
+    <h2 class="section-title">Demo path options</h2>
+    <div class="note"><strong>Recommended for live demos:</strong> Use <strong>Path B</strong> for reliability and fewer moving parts. Use <strong>Path A</strong> in production when you want full ADO-to-GitHub automation.</div>
+    <div class="grid2">
+      <div class="panel do"><h4>Path A — Full Automation</h4><p>ADO Service Hook → <code>ado-issue-sync.yml</code> → automatic issue creation + Copilot assignment.</p><p class="small">Setup guide: <a href="docs/setup-ado-sync.html">docs/setup-ado-sync.html</a></p></div>
+      <div class="panel say"><h4>Path B — Manual + Auto-Assign</h4><p>Create the ADO work item manually → create the GitHub issue manually with <code>AB#</code> + <code>copilot-agent</code> label → <code>auto-assign-copilot.yml</code> handles Copilot assignment.</p><p class="small">Setup guide: <a href="docs/setup-auto-assign.html">docs/setup-auto-assign.html</a></p></div>
+    </div>
+  </section>
+
   <section class="card" id="setup">
     <h2 class="section-title">Pre-demo setup checklist</h2>
     <div class="grid2">
@@ -68,7 +78,7 @@
   </section>
 
   <section class="card timing" id="timing">
-    <h2 class="section-title">Timing guide (~30–40 min)</h2>
+    <h2 class="section-title">Timing guide (~30–45 min)</h2>
     <table>
       <tr><th>Segment</th><th>Minutes</th><th>Notes</th></tr>
       <tr><td>Intro + challenge/vision</td><td>4-5</td><td>Use customer-facing deck.</td></tr>
@@ -76,6 +86,12 @@
       <tr><td>Steps 3-7</td><td>12-15</td><td>Main AI story: assign, branch, code, tests, PR.</td></tr>
       <tr><td>Steps 8-10</td><td>6-8</td><td>Human oversight, pipeline, merge, close loop.</td></tr>
       <tr><td>Wrap-up + Q&amp;A</td><td>5-7</td><td>Return to customer-facing deck.</td></tr>
+    </table>
+    <div class="note" style="margin-top:16px"><strong>Recommended demo cuts:</strong> use the 45-minute version when you want to include the GitHub Advanced Security story. Use the 30-minute version when you need a tighter executive walkthrough.</div>
+    <table style="margin-top:16px">
+      <tr><th>Version</th><th>Minutes</th><th>What to include</th><th>Notes</th></tr>
+      <tr><td>45-minute version (recommended)</td><td>45</td><td>Full flow through Step 10 + Step 11 GHAS bonus</td><td>Best balance of delivery workflow, human review, and security story.</td></tr>
+      <tr><td>30-minute version (compressed)</td><td>30</td><td>Steps 1-10 only</td><td>Skip GHAS and shorten the review section to keep momentum.</td></tr>
     </table>
   </section>
 
@@ -199,6 +215,17 @@
     </div>
   </section>
 
+  <section class="step" id="step11">
+    <div class="step-head"><div><h3>Step 11 — ⭐ Bonus: GitHub Advanced Security</h3><div class="small">Optional 45-minute extension to show security controls around both human and agent-authored changes.</div></div><div class="time">~6 min</div></div>
+    <div class="step-grid">
+      <div class="panel do"><h4>🟢 DO</h4><ul><li><strong>Dependabot:</strong> Open repo Security tab → Dependabot alerts → show <code>.github/dependabot.yml</code> config.</li><li><strong>CodeQL:</strong> Open Security → Code scanning → show the CodeQL workflow in Actions tab.</li><li><strong>Secret Scanning:</strong> Open Settings → Code security → show it's enabled.</li></ul></div>
+      <div class="panel say"><h4>🔵 SAY</h4><p>“Let's talk about security. Every change — whether from a human developer or the Copilot agent — gets three layers of automated security scanning. Dependabot catches vulnerable dependencies and opens fix PRs. CodeQL analyzes the JavaScript code for security vulnerabilities. And secret scanning catches any accidentally committed credentials. This is shift-left security, built into the workflow.”</p></div>
+      <div class="panel expect"><h4>🟡 EXPECT</h4><ul><li>Dependabot alerts visible (if any vulnerable deps exist).</li><li>CodeQL workflow visible in Actions.</li><li>Secret scanning enabled in Settings.</li></ul></div>
+      <div class="panel fallback"><h4>🔴 FALLBACK</h4><ul><li>If no Dependabot alerts: “No alerts means clean dependencies — that's the goal. Let me show you the config.”</li><li>If CodeQL hasn't run yet: Show the workflow YAML and explain the schedule.</li></ul></div>
+      <div class="panel"><h4>Close on this line</h4><p>“AI acceleration only works at enterprise scale when security ships with it. GitHub gives us that security posture inside the same developer workflow.”</p></div>
+    </div>
+  </section>
+
   <section class="card" id="talking">
     <h2 class="section-title">Key talking points</h2>
     <div class="grid2">
@@ -215,7 +242,8 @@
       <div><strong>Step 4 → Step 5:</strong> “The branch is the envelope; now let’s inspect the work inside it.”</div>
       <div><strong>Step 7 → Step 8:</strong> “This is the critical handoff: AI stops at the PR, humans take it from there.”</div>
       <div><strong>Step 9 → Step 10:</strong> “If the same gates pass, the same merge process applies.”</div>
-      <div><strong>Wrap-up:</strong> “The outcome is faster implementation without giving up control, traceability, or quality.”</div>
+      <div><strong>Step 10 → Step 11:</strong> “Before we wrap, let me show you the security controls protecting every merged change.”</div>
+      <div><strong>Wrap-up:</strong> “The outcome is faster implementation without giving up control, traceability, quality, or security.”</div>
     </div>
   </section>
 

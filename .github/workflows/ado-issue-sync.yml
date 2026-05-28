@@ -1,0 +1,203 @@
+name: ADO Work Item to GitHub Issue Sync
+
+on:
+  # Manual trigger for demos and ad-hoc testing from the Actions tab.
+  workflow_dispatch:
+    inputs:
+      ado_work_item_id:
+        description: Azure DevOps work item ID
+        required: true
+        type: string
+      work_item_title:
+        description: Azure DevOps work item title
+        required: true
+        type: string
+      work_item_description:
+        description: Optional Azure DevOps work item description
+        required: false
+        type: string
+      work_item_type:
+        description: Azure DevOps work item type
+        required: true
+        default: User Story
+        type: choice
+        options:
+          - Bug
+          - User Story
+          - Task
+      severity:
+        description: Severity label to apply to the GitHub issue
+        required: true
+        default: medium
+        type: choice
+        options:
+          - low
+          - medium
+          - high
+          - critical
+
+  # Webhook-style trigger for Azure DevOps integrations that call repository_dispatch.
+  repository_dispatch:
+    types:
+      - ado-work-item-created
+
+jobs:
+  create-github-issue:
+    name: Create linked GitHub issue
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    outputs:
+      issue_number: ${{ steps.create_issue.outputs.issue_number }}
+      issue_url: ${{ steps.create_issue.outputs.issue_url }}
+
+    steps:
+      # This workflow uses the built-in GITHUB_TOKEN for GitHub issue creation.
+      # If you later add bi-directional sync back to Azure DevOps, store an ADO_PAT
+      # secret and use it in a follow-up step that updates the ADO work item.
+      - name: Parse event payload
+        id: parse
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_ADO_ID: ${{ inputs.ado_work_item_id }}
+          INPUT_TITLE: ${{ inputs.work_item_title }}
+          INPUT_DESCRIPTION: ${{ inputs.work_item_description }}
+          INPUT_TYPE: ${{ inputs.work_item_type }}
+          INPUT_SEVERITY: ${{ inputs.severity }}
+          PAYLOAD_ADO_ID: ${{ github.event.client_payload.ado_work_item_id }}
+          PAYLOAD_TITLE: ${{ github.event.client_payload.work_item_title }}
+          PAYLOAD_DESCRIPTION: ${{ github.event.client_payload.work_item_description }}
+          PAYLOAD_TYPE: ${{ github.event.client_payload.work_item_type }}
+          PAYLOAD_SEVERITY: ${{ github.event.client_payload.severity }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            ado_id="$INPUT_ADO_ID"
+            title="$INPUT_TITLE"
+            description="$INPUT_DESCRIPTION"
+            work_item_type="$INPUT_TYPE"
+            severity="$INPUT_SEVERITY"
+          else
+            ado_id="$PAYLOAD_ADO_ID"
+            title="$PAYLOAD_TITLE"
+            description="$PAYLOAD_DESCRIPTION"
+            work_item_type="$PAYLOAD_TYPE"
+            severity="$PAYLOAD_SEVERITY"
+          fi
+
+          if [[ -z "$ado_id" || -z "$title" ]]; then
+            echo "Missing required work item fields from the event payload." >&2
+            exit 1
+          fi
+
+          work_item_type="${work_item_type:-User Story}"
+          severity="${severity:-medium}"
+          ado_url="https://dev.azure.com/brandsafway1/_workitems/edit/$ado_id"
+          issue_title="[AB#$ado_id] $title"
+
+          {
+            echo "ado_id=$ado_id"
+            echo "title=$title"
+            echo "description<<EOF"
+            echo "${description:-No description provided from Azure DevOps.}"
+            echo "EOF"
+            echo "work_item_type=$work_item_type"
+            echo "severity=$severity"
+            echo "ado_url=$ado_url"
+            echo "issue_title=$issue_title"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Ensure demo labels exist
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          SEVERITY: ${{ steps.parse.outputs.severity }}
+        run: |
+          set -euo pipefail
+
+          # Pre-create labels so issue creation works in a fresh demo repository.
+          gh label create "ado-synced" --repo "$REPOSITORY" --color "0E8A16" --description "Synced from Azure DevOps" --force
+          gh label create "copilot-agent" --repo "$REPOSITORY" --color "5319E7" --description "Assigned to the GitHub Copilot coding agent" --force
+          gh label create "severity:$SEVERITY" --repo "$REPOSITORY" --color "B60205" --description "Severity imported from Azure DevOps" --force
+
+      - name: Create GitHub issue for Copilot
+        id: create_issue
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          ADO_ID: ${{ steps.parse.outputs.ado_id }}
+          ADO_URL: ${{ steps.parse.outputs.ado_url }}
+          ISSUE_TITLE: ${{ steps.parse.outputs.issue_title }}
+          WORK_ITEM_TITLE: ${{ steps.parse.outputs.title }}
+          WORK_ITEM_DESCRIPTION: ${{ steps.parse.outputs.description }}
+          WORK_ITEM_TYPE: ${{ steps.parse.outputs.work_item_type }}
+          SEVERITY: ${{ steps.parse.outputs.severity }}
+        run: |
+          set -euo pipefail
+
+          # Build a markdown body that keeps the GitHub issue clearly linked to ADO.
+          cat <<EOF > issue-body.md
+          ## Azure DevOps Work Item Sync
+
+          This issue was automatically synced from Azure DevOps for the BrandSafway demo.
+
+          - **ADO Work Item ID:** $ADO_ID
+          - **ADO Link:** $ADO_URL
+          - **Work Item Type:** $WORK_ITEM_TYPE
+          - **Severity:** $SEVERITY
+
+          ## Title
+
+          $WORK_ITEM_TITLE
+
+          ## Description
+
+          $WORK_ITEM_DESCRIPTION
+
+          ---
+          _Auto-synced by the ADO to GitHub issue workflow. The issue is assigned to `@copilot` so the Copilot coding agent can begin work._
+          EOF
+
+          # Create the issue, apply demo labels, and assign Copilot as the coding agent.
+          issue_url=$(gh issue create \
+            --repo "$REPOSITORY" \
+            --title "$ISSUE_TITLE" \
+            --body-file issue-body.md \
+            --label "ado-synced" \
+            --label "copilot-agent" \
+            --label "severity:$SEVERITY" \
+            --assignee "copilot")
+
+          issue_number="${issue_url##*/}"
+
+          {
+            echo "issue_number=$issue_number"
+            echo "issue_url=$issue_url"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Add issue comment with ADO confirmation
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ steps.create_issue.outputs.issue_number }}
+          ADO_ID: ${{ steps.parse.outputs.ado_id }}
+          ADO_URL: ${{ steps.parse.outputs.ado_url }}
+        run: |
+          set -euo pipefail
+
+          # Add a visible audit comment so the GitHub issue shows the original ADO source.
+          gh issue comment "$ISSUE_NUMBER" \
+            --repo "$REPOSITORY" \
+            --body "Linked Azure DevOps work item: [AB#$ADO_ID]($ADO_URL)"
+
+      - name: Log created issue details
+        shell: bash
+        run: |
+          echo "Created issue #${{ steps.create_issue.outputs.issue_number }}"
+          echo "Issue URL: ${{ steps.create_issue.outputs.issue_url }}"

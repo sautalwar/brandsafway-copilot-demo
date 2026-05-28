@@ -1,9 +1,14 @@
+# Azure DevOps Pipeline for BrandSafway Safety Inspection Tracker
+# Validates PRs (including Copilot agent branches targeting main)
+# and deploys to staging on merge to main.
+
 trigger:
   branches:
     include:
       - main
   
 pr:
+  # PR validation also catches copilot/* branches automatically when they target main.
   branches:
     include:
       - main
@@ -35,9 +40,27 @@ stages:
               testResultsFiles: '**/junit.xml'
             displayName: 'Publish test results'
 
+  - stage: Security
+    displayName: 'Security Scan'
+    dependsOn: Build
+    jobs:
+      - job: AuditDependencies
+        displayName: 'Audit Dependencies'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '20.x'
+            displayName: 'Install Node.js'
+          - script: npm ci
+            displayName: 'Install dependencies'
+          - script: npm audit --audit-level=high || true
+            displayName: 'Run npm audit (advisory)'
+
   - stage: Deploy
     displayName: 'Deploy'
-    dependsOn: Build
+    dependsOn:
+      - Build
+      - Security
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     jobs:
       - deployment: DeployToStaging

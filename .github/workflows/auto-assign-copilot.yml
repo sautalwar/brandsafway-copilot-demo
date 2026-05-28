@@ -1,0 +1,112 @@
+# Demo workflow: automatically assign the GitHub Copilot coding agent
+# when a manually created GitHub issue enters the Copilot path.
+name: Auto-assign Copilot agent
+
+on:
+  issues:
+    # Run when a new issue is opened or when a label is added later.
+    types:
+      - opened
+      - labeled
+
+# Prevent duplicate assignment/comment runs for the same issue.
+concurrency:
+  group: auto-assign-copilot-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  assign-copilot-agent:
+    name: Assign Copilot coding agent
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+      contents: read
+
+    # Only continue when the issue is actually in the Copilot path.
+    if: >-
+      ${{
+        (github.event.action == 'labeled' && github.event.label.name == 'copilot-agent') ||
+        contains(github.event.issue.labels.*.name, 'copilot-agent')
+      }}
+
+    steps:
+      # Step A: Double-check the label logic for demo clarity and expose an output
+      # that later steps can reuse.
+      - name: Check for the copilot-agent label
+        id: label-check
+        shell: bash
+        env:
+          EVENT_ACTION: ${{ github.event.action }}
+          EVENT_LABEL: ${{ github.event.label.name }}
+          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ',') }}
+        run: |
+          should_assign="false"
+
+          if [[ "$EVENT_ACTION" == "labeled" && "$EVENT_LABEL" == "copilot-agent" ]]; then
+            should_assign="true"
+          elif [[ ",$ISSUE_LABELS," == *",copilot-agent,"* ]]; then
+            should_assign="true"
+          fi
+
+          echo "should_assign=$should_assign" >> "$GITHUB_OUTPUT"
+          echo "Issue labels: $ISSUE_LABELS"
+          echo "Should assign Copilot: $should_assign"
+
+      # Step B: Assign the built-in Copilot coding agent to the issue.
+      - name: Assign Copilot to the issue
+        if: steps.label-check.outputs.should_assign == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPOSITORY: ${{ github.repository }}
+        run: gh issue edit "$ISSUE_NUMBER" --repo "$REPOSITORY" --add-assignee copilot
+
+      # Step C: Post the standard demo comment so the workflow is visible to viewers.
+      - name: Add Copilot assignment comment
+        if: steps.label-check.outputs.should_assign == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          gh issue comment "$ISSUE_NUMBER" --repo "$REPOSITORY" --body "$(cat <<'EOF'
+          🤖 **GitHub Copilot coding agent** has been assigned to this issue.
+
+          The agent will:
+          1. Create a feature branch
+          2. Implement the requested changes
+          3. Write tests to verify the implementation
+          4. Open a pull request for review
+
+          📋 Please ensure the issue description includes clear acceptance criteria.
+          EOF
+          )"
+
+      # Step D: If the issue references an Azure DevOps work item with AB#123,
+      # add a follow-up comment that links back to the work item for demo traceability.
+      - name: Add Azure DevOps work item note
+        if: steps.label-check.outputs.should_assign == 'true' && contains(github.event.issue.body || '', 'AB#')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          work_item_ref=$(printf '%s' "$ISSUE_BODY" | grep -oE 'AB#[0-9]+' | head -n 1 || true)
+
+          if [[ -z "$work_item_ref" ]]; then
+            echo "No Azure DevOps work item reference found in the issue body."
+            exit 0
+          fi
+
+          work_item_id="${work_item_ref#AB#}"
+          ado_url="https://dev.azure.com/brandsafway1/_workitems/edit/$work_item_id"
+
+          gh issue comment "$ISSUE_NUMBER" --repo "$REPOSITORY" --body "$(cat <<EOF
+          🔗 Azure DevOps work item detected: [$work_item_ref]($ado_url)
+
+          This issue is part of the BrandSafway demo traceability flow between GitHub and Azure DevOps.
+          EOF
+          )"

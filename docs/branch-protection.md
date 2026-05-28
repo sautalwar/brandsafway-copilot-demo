@@ -28,3 +28,24 @@ Use these settings on the `main` branch to support the BrandSafway Copilot + Azu
 - Use the same `main` branch target in both GitHub and Azure DevOps.
 - Ensure the staging deployment environment is protected and visible to reviewers.
 - Review failed validation results in both systems so traceability remains intact for the demo.
+
+## GitHub Advanced Security Status Checks
+- Add `CodeQL` as a required status check for PRs to `main`.
+- Dependabot security alerts should block merges for high/critical severity.
+- Secret scanning push protection is enabled — pushes containing detected secrets will be blocked.
+- The CodeQL Analysis workflow (`.github/workflows/codeql.yml`) runs on every PR to `main` and on every push to `main`.
+- Consider making the CodeQL check required once the initial scan baseline is clean.
+
+## ADO Pipeline Security Stage
+- The `azure-pipelines.yml` now includes a Security Scan stage that runs `npm audit --audit-level=high`.
+- This stage runs between Build and Deploy.
+- While currently advisory (uses `|| true`), it can be made blocking by removing the `|| true` fallback.
+- The Deploy stage depends on both Build and Security stages passing.
+
+## Complete Required Status Checks List
+| Check | Source | Required? | Notes |
+|-------|--------|-----------|-------|
+| CI | GitHub Actions (`ci.yml`) | Yes | Build + test + lint |
+| CodeQL Analysis | GitHub Actions (`codeql.yml`) | Recommended | Security scanning |
+| Build & Test | Azure DevOps Pipeline | Yes | ADO PR validation |
+| Security Scan | Azure DevOps Pipeline | Advisory | npm audit |

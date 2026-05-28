@@ -34,3 +34,33 @@ This repository hosts the BrandSafway Safety Inspection Tracker API demo. It is 
 - Check for existing `TODO` comments and treat them as potential enhancement opportunities when relevant to the task.
 - Keep pull requests scoped, explain what changed, and reference the related issue number.
 - When creating a PR, include the GitHub issue reference and the Azure DevOps work item reference when available.
+
+## Azure DevOps Integration
+- When working on an issue that references an ADO work item (identified by `AB#<number>` in the issue title or body), include the `AB#<number>` reference in:
+  - Every commit message (e.g., `feat: Add input validation for POST endpoint AB#123`)
+  - The PR title
+  - The PR description body
+- This ensures Azure Boards automatically links commits and PRs to the work item for full traceability.
+
+## Branch Naming Convention
+- Use the pattern: `copilot/<issue-number>-<short-kebab-description>`
+- Examples:
+  - `copilot/42-add-input-validation`
+  - `copilot/57-stats-endpoint`
+- Always branch from `main`.
+
+## Pull Request Guidelines
+- PR title format: `<type>: <description> AB#<work-item-id>` (if ADO link exists)
+- PR description must include:
+  - **Summary** of what changed and why
+  - **Issue reference** using `Closes #<issue-number>` or `Fixes #<issue-number>`
+  - **ADO reference** using `AB#<work-item-id>` if applicable
+  - **Testing** section describing what tests were added or modified
+- Request review from the repository maintainer.
+- Ensure all CI checks pass before marking PR as ready for review.
+
+## Security Considerations
+- Never commit secrets, API keys, or credentials to the repository.
+- Use environment variables for sensitive configuration.
+- Be aware that GitHub Advanced Security (CodeQL, Dependabot, secret scanning) is enabled on this repository.
+- Address any security findings flagged by CodeQL before opening a PR.

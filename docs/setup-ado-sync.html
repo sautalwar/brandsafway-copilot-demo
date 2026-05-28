@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrandSafway ADO to GitHub Automation Setup Guide</title>
+  <style>
+    :root {
+      --brand: #0f3d75;
+      --brand-dark: #0b2d57;
+      --ink: #1f2937;
+      --muted: #5b6472;
+      --line: #d7deea;
+      --bg: #f4f7fb;
+      --white: #ffffff;
+      --action-bg: #edf9f1;
+      --action-border: #2e9b57;
+      --note-bg: #eef5ff;
+      --note-border: #2f6fdd;
+      --warn-bg: #fff4e8;
+      --warn-border: #d97706;
+      --code-bg: #0f172a;
+      --code-ink: #e5eefc;
+      --shadow: 0 12px 28px rgba(15, 61, 117, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      padding: 28px 24px;
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 6px 0 24px rgba(15, 61, 117, 0.18);
+    }
+
+    .brand-mark {
+      display: inline-block;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .sidebar h1 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.15;
+    }
+
+    .sidebar p {
+      margin: 0 0 24px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 14px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 24px;
+    }
+
+    .nav-list li + li {
+      margin-top: 8px;
+    }
+
+    .nav-list a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-list a:hover {
+      background: rgba(255, 255, 255, 0.16);
+      text-decoration: none;
+    }
+
+    .sidebar .meta {
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .content {
+      padding: 40px 44px 60px;
+    }
+
+    .hero,
+    .section {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 34px;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, rgba(15, 61, 117, 0.06), rgba(255, 255, 255, 0.98));
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(15, 61, 117, 0.1);
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h2 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.15;
+      color: var(--brand-dark);
+    }
+
+    .hero p {
+      margin: 0 0 18px;
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 920px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+      color: var(--brand);
+    }
+
+    .card p,
+    .card li {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .section {
+      padding: 28px 30px;
+      margin-bottom: 22px;
+    }
+
+    .section h2 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      color: var(--brand-dark);
+    }
+
+    .section > p {
+      margin-top: 0;
+      color: var(--muted);
+    }
+
+    .panel {
+      border-left: 6px solid;
+      border-radius: 16px;
+      padding: 18px 18px 18px 20px;
+      margin: 18px 0;
+    }
+
+    .panel h3,
+    .panel h4 {
+      margin: 0 0 8px;
+    }
+
+    .panel p:last-child,
+    .panel ul:last-child,
+    .panel ol:last-child {
+      margin-bottom: 0;
+    }
+
+    .action {
+      background: var(--action-bg);
+      border-color: var(--action-border);
+    }
+
+    .note {
+      background: var(--note-bg);
+      border-color: var(--note-border);
+    }
+
+    .warning {
+      background: var(--warn-bg);
+      border-color: var(--warn-border);
+    }
+
+    ol.steps {
+      padding-left: 22px;
+      margin: 12px 0;
+    }
+
+    ol.steps li {
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+
+    ul.checklist {
+      margin: 12px 0;
+      padding-left: 20px;
+    }
+
+    .callout-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    code,
+    pre {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .inline,
+    code.inline {
+      display: inline-block;
+      background: #eef2f8;
+      border: 1px solid #d8e1f0;
+      border-radius: 6px;
+      padding: 2px 6px;
+      color: var(--brand-dark);
+      font-size: 0.95em;
+    }
+
+    pre {
+      margin: 14px 0 0;
+      padding: 18px;
+      background: var(--code-bg);
+      color: var(--code-ink);
+      border-radius: 16px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: #eef4fb;
+      color: var(--brand-dark);
+      font-size: 14px;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .footer {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
+
+      .content {
+        padding: 24px 18px 40px;
+      }
+
+      .hero,
+      .section {
+        padding: 22px;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        box-shadow: none;
+        page-break-after: avoid;
+      }
+
+      .nav-list a {
+        border: 1px solid rgba(255, 255, 255, 0.25);
+      }
+
+      .content {
+        padding: 0;
+      }
+
+      .hero,
+      .section {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand-mark">BrandSafway</div>
+      <h1>ADO → GitHub Automation Setup</h1>
+      <p>Full setup guide for automatically creating GitHub issues from Azure DevOps work items and assigning the Copilot coding agent.</p>
+      <ul class="nav-list">
+        <li><a href="#overview">1. Overview</a></li>
+        <li><a href="#prerequisites">2. Prerequisites</a></li>
+        <li><a href="#service-hooks">3. ADO Service Hook Setup</a></li>
+        <li><a href="#manual-trigger">4. Manual Trigger</a></li>
+        <li><a href="#verification">5. Verifying the Connection</a></li>
+        <li><a href="#troubleshooting">6. Troubleshooting</a></li>
+      </ul>
+      <div class="meta">
+        <strong>Azure DevOps</strong><br>
+        <a href="https://dev.azure.com/brandsafway1/Project1">https://dev.azure.com/brandsafway1/Project1</a><br><br>
+        <strong>GitHub Repository</strong><br>
+        <a href="https://github.com/sautalwar/brandsafway-copilot-demo">github.com/sautalwar/brandsafway-copilot-demo</a>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section class="hero">
+        <span class="eyebrow">Automation Path</span>
+        <h2>Azure DevOps work item to GitHub issue to Copilot agent</h2>
+        <p>This guide covers the full BrandSafway demo automation path: create or update a work item in Azure DevOps, send the event into GitHub Actions, create a synchronized GitHub issue with an <span class="inline">AB#</span> reference, and assign the Copilot coding agent so work can begin with minimal manual handoff.</p>
+        <div class="grid">
+          <div class="card">
+            <h3>Source system</h3>
+            <p>Azure DevOps project: <a href="https://dev.azure.com/brandsafway1/Project1">https://dev.azure.com/brandsafway1/Project1</a></p>
+          </div>
+          <div class="card">
+            <h3>Automation target</h3>
+            <p>GitHub repo: <a href="https://github.com/sautalwar/brandsafway-copilot-demo">github.com/sautalwar/brandsafway-copilot-demo</a></p>
+          </div>
+          <div class="card">
+            <h3>Workflow entry point</h3>
+            <p>GitHub Actions workflow: <span class="inline">ado-issue-sync.yml</span> with <span class="inline">repository_dispatch</span> and <span class="inline">workflow_dispatch</span> support.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="overview" class="section">
+        <h2>1. Overview</h2>
+        <p>This automation is designed for a full ADO → GitHub execution path where Azure Boards remains the planning system and GitHub becomes the execution system for Copilot-enabled development.</p>
+
+        <div class="panel action">
+          <h3>What the automation does</h3>
+          <ol class="steps">
+            <li>An Azure DevOps work item is created or updated.</li>
+            <li>An Azure DevOps service hook posts a <span class="inline">repository_dispatch</span> event to GitHub.</li>
+            <li>The GitHub Actions workflow <span class="inline">ado-issue-sync.yml</span> runs.</li>
+            <li>A GitHub issue is created with the related <span class="inline">AB#&lt;work item id&gt;</span> reference in the title or body.</li>
+            <li>The issue is labeled for sync and severity, then the Copilot coding agent is assigned.</li>
+          </ol>
+        </div>
+
+        <div class="callout-row">
+          <div class="panel note">
+            <h3>Use this full automation path when</h3>
+            <ul class="checklist">
+              <li>You want Azure DevOps work item creation to start the GitHub execution flow automatically.</li>
+              <li>You need a repeatable demo or operating model with minimal manual steps.</li>
+              <li>You want the ADO work item and GitHub issue linked for traceability.</li>
+            </ul>
+          </div>
+          <div class="panel warning">
+            <h3>Use the manual path instead when</h3>
+            <ul class="checklist">
+              <li>You do not have service hooks or PAT-based integration approved yet.</li>
+              <li>You only need to assign Copilot on issues already created in GitHub.</li>
+              <li>You want a lighter setup using the companion manual guide <span class="inline">setup-auto-assign.html</span>.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="prerequisites" class="section">
+        <h2>2. Prerequisites</h2>
+        <p>Confirm the following items before building the end-to-end automation path.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Requirement</th>
+              <th>What to confirm</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GitHub repository</td>
+              <td>Repository exists at <a href="https://github.com/sautalwar/brandsafway-copilot-demo">https://github.com/sautalwar/brandsafway-copilot-demo</a> and has Copilot coding agent enabled.</td>
+            </tr>
+            <tr>
+              <td>Azure DevOps project</td>
+              <td>Project is available at <a href="https://dev.azure.com/brandsafway1/Project1">https://dev.azure.com/brandsafway1/Project1</a>.</td>
+            </tr>
+            <tr>
+              <td>ADO ↔ GitHub connection</td>
+              <td>Configured in <strong>Project Settings → GitHub connections</strong> so Azure DevOps can show Development links back to GitHub.</td>
+            </tr>
+            <tr>
+              <td>Repository secret</td>
+              <td>Create <span class="inline">ADO_PAT</span> if you need bi-directional sync or follow-up updates back into Azure DevOps.</td>
+            </tr>
+            <tr>
+              <td>Labels</td>
+              <td>Pre-create <span class="inline">copilot-agent</span>, <span class="inline">ado-synced</span>, <span class="inline">severity:low</span>, <span class="inline">severity:medium</span>, <span class="inline">severity:high</span>, and <span class="inline">severity:critical</span>.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="panel note">
+          <h3>Recommended token setup</h3>
+          <p>For the Azure DevOps service hook call, create a GitHub PAT with permission to trigger repository dispatch events and interact with issues. Store it securely outside the HTML guide. Do not commit tokens or credentials into the repository.</p>
+        </div>
+      </section>
+
+      <section id="service-hooks" class="section">
+        <h2>3. Step-by-Step: ADO Service Hook Setup</h2>
+        <p>Use an Azure DevOps service hook to send work item events directly to GitHub so the issue sync workflow runs automatically.</p>
+
+        <div class="panel action">
+          <h3>Create the subscription in Azure DevOps</h3>
+          <ol class="steps">
+            <li>Open <a href="https://dev.azure.com/brandsafway1/Project1">https://dev.azure.com/brandsafway1/Project1</a>.</li>
+            <li>Go to <strong>Project Settings → Service Hooks</strong>.</li>
+            <li>Select <strong>Create Subscription</strong>.</li>
+            <li>Choose <strong>Web Hooks</strong> as the service.</li>
+            <li>Select the trigger <strong>Work item created</strong> or <strong>Work item updated</strong>, depending on when you want sync to occur.</li>
+            <li>Apply filters such as work item type, area path, iteration path, or changed fields to narrow which items are sent to GitHub.</li>
+          </ol>
+        </div>
+
+        <div class="panel note">
+          <h3>Configure the webhook target</h3>
+          <ul class="checklist">
+            <li><strong>Action URL:</strong> <span class="inline">https://api.github.com/repos/sautalwar/brandsafway-copilot-demo/dispatches</span></li>
+            <li><strong>Headers:</strong> <span class="inline">Authorization: Bearer &lt;GITHUB_PAT&gt;</span></li>
+            <li><strong>Headers:</strong> <span class="inline">Accept: application/vnd.github+json</span></li>
+            <li><strong>HTTP method:</strong> POST</li>
+            <li><strong>Content type:</strong> application/json</li>
+          </ul>
+        </div>
+
+        <div class="panel action">
+          <h3>Use this request body template</h3>
+          <p>Map Azure DevOps work item fields into the GitHub <span class="inline">repository_dispatch</span> payload. Adjust the description or type mapping to fit your process.</p>
+          <pre>{
+  "event_type": "ado-work-item-created",
+  "client_payload": {
+    "ado_work_item_id": "{{workitem.id}}",
+    "work_item_title": "{{workitem.title}}",
+    "work_item_description": "...",
+    "work_item_type": "User Story",
+    "severity": "medium"
+  }
+}</pre>
+        </div>
+
+        <div class="panel warning">
+          <h3>Important implementation notes</h3>
+          <ul class="checklist">
+            <li>Make sure the workflow is listening for the same <span class="inline">event_type</span> value, such as <span class="inline">ado-work-item-created</span>.</li>
+            <li>If you use <strong>Work item updated</strong>, avoid filters that create duplicate issue creation runs for non-actionable changes.</li>
+            <li>If severity is stored in a custom field, map it explicitly before the payload reaches GitHub labels.</li>
+            <li>Use the service hook test feature before enabling the subscription broadly.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="manual-trigger" class="section">
+        <h2>4. Step-by-Step: Manual Trigger (workflow_dispatch)</h2>
+        <p>If the ADO service hook is not ready yet, you can still prove the flow by manually running the GitHub Actions workflow.</p>
+
+        <div class="panel action">
+          <h3>Run the workflow manually</h3>
+          <ol class="steps">
+            <li>Open the repository at <a href="https://github.com/sautalwar/brandsafway-copilot-demo">https://github.com/sautalwar/brandsafway-copilot-demo</a>.</li>
+            <li>Select the <strong>Actions</strong> tab.</li>
+            <li>Choose the workflow <strong>ADO Work Item to GitHub Issue Sync</strong>.</li>
+            <li>Click <strong>Run workflow</strong>.</li>
+            <li>Fill in the workflow inputs: work item ID, title, description, type, and severity.</li>
+            <li>Click <strong>Run workflow</strong> again to submit the job.</li>
+          </ol>
+        </div>
+
+        <div class="panel note">
+          <h3>Expected result</h3>
+          <p>The workflow should create a GitHub issue that includes the Azure DevOps reference, apply <span class="inline">ado-synced</span>, <span class="inline">copilot-agent</span>, and the selected <span class="inline">severity:*</span> label, then assign the Copilot coding agent.</p>
+        </div>
+      </section>
+
+      <section id="verification" class="section">
+        <h2>5. Verifying the Connection</h2>
+        <p>After an automated or manual run, validate the setup from both systems.</p>
+
+        <div class="panel action">
+          <h3>Verification checklist</h3>
+          <ul class="checklist">
+            <li>Check that a new issue was created in GitHub for the incoming Azure DevOps work item.</li>
+            <li>Verify the labels include <span class="inline">ado-synced</span>, <span class="inline">copilot-agent</span>, and the correct <span class="inline">severity:low</span>, <span class="inline">severity:medium</span>, <span class="inline">severity:high</span>, or <span class="inline">severity:critical</span> label.</li>
+            <li>Verify the Copilot coding agent is assigned to the issue.</li>
+            <li>Open the Azure DevOps work item and confirm the <strong>Development</strong> panel shows the linked GitHub issue.</li>
+            <li>Check the GitHub Actions run log for the <strong>ADO Work Item to GitHub Issue Sync</strong> workflow.</li>
+          </ul>
+        </div>
+
+        <div class="panel note">
+          <h3>Traceability tip</h3>
+          <p>Keep the <span class="inline">AB#&lt;work item id&gt;</span> reference in the created issue title or body so future branches, commits, and pull requests automatically link back into Azure Boards.</p>
+        </div>
+      </section>
+
+      <section id="troubleshooting" class="section">
+        <h2>6. Troubleshooting</h2>
+        <p>Most setup issues come down to permissions, payload formatting, or workflow expectations. Use the checks below to narrow the problem quickly.</p>
+
+        <div class="callout-row">
+          <div class="panel warning">
+            <h3>Common issues</h3>
+            <ul class="checklist">
+              <li><strong>PAT permissions:</strong> The GitHub PAT cannot trigger the dispatch endpoint or create issues.</li>
+              <li><strong>Webhook URL format:</strong> The dispatch endpoint path is incorrect or points to the wrong repository.</li>
+              <li><strong>Label not found:</strong> The workflow expects labels that were not pre-created in the repository.</li>
+              <li><strong>Copilot not available:</strong> Copilot coding agent is not enabled or cannot be assigned in the target repository.</li>
+            </ul>
+          </div>
+          <div class="panel note">
+            <h3>How to inspect workflow logs</h3>
+            <ol class="steps">
+              <li>Open <strong>Actions</strong> in GitHub.</li>
+              <li>Select the latest run of <strong>ADO Work Item to GitHub Issue Sync</strong>.</li>
+              <li>Open the failed job or step to inspect payload handling, label application, and assignment actions.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="panel action">
+          <h3>How to re-run a failed workflow</h3>
+          <ol class="steps">
+            <li>Open the failed GitHub Actions run.</li>
+            <li>Click <strong>Re-run jobs</strong> or <strong>Re-run failed jobs</strong>.</li>
+            <li>If the failure came from bad payload data, correct the source work item or manual inputs first, then re-run.</li>
+            <li>If the failure came from missing labels or permissions, fix the repository configuration before retrying.</li>
+          </ol>
+        </div>
+      </section>
+
+      <div class="footer">
+        BrandSafway setup guide for the full Azure DevOps to GitHub automation path.
+      </div>
+    </main>
+  </div>
+</body>
+</html>

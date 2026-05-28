@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BrandSafway — End-to-End Developer Agent Demo Sequence</title>
+<style>
+:root{--bg:#f8fafc;--panel:#fff;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--brand:#0f3d75;--brand-light:#1e5aad;--accent:#fbbf24;--green:#16a34a;--green-bg:#f0fdf4;--green-border:#bbf7d0;--blue:#2563eb;--blue-bg:#eff6ff;--blue-border:#bfdbfe;--orange:#ea580c;--orange-bg:#fff7ed;--orange-border:#fed7aa;--purple:#7c3aed;--purple-bg:#f5f3ff;--purple-border:#ddd6fe;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fecaca;--teal:#0d9488;--teal-bg:#f0fdfa;--teal-border:#99f6e4;--shadow:0 4px 24px rgba(15,23,42,.06);--radius:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font:17px/1.6 'Segoe UI',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--brand);text-decoration:none}a:hover{text-decoration:underline}
+
+/* Layout */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto;padding:24px 20px;background:#fff;border-right:1px solid var(--line);z-index:10}
+.main{margin-left:300px;padding:32px 36px 60px;max-width:1100px}
+
+/* Sidebar */
+.logo-block{padding:18px 16px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(135deg,#fff,#f1f5f9);box-shadow:var(--shadow);margin-bottom:20px}
+.logo-block h1{font-size:1.3rem;line-height:1.2;color:var(--brand)}
+.logo-block p{font-size:.88rem;color:var(--muted);margin-top:6px}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav a{display:block;padding:9px 12px;border-radius:10px;font-size:.92rem;color:var(--ink);border:1px solid transparent;transition:all .15s}
+.nav a:hover{background:var(--blue-bg);border-color:var(--blue-border);text-decoration:none}
+.nav .section-label{margin-top:14px;padding:4px 12px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.url-box{margin-top:20px;padding:14px;border:1px solid var(--line);border-radius:12px;background:#f8fafc;font-size:.85rem}
+.url-box strong{display:block;margin-bottom:6px;color:var(--brand)}
+.url-box code{display:block;padding:4px 0;font:13px/1.4 Consolas,'Courier New',monospace;word-break:break-all;color:var(--ink)}
+
+/* Hero */
+.hero{padding:28px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,#fff 0%,#f1f5f9 100%);box-shadow:var(--shadow);margin-bottom:28px}
+.eyebrow{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--blue-bg);color:var(--brand);font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.hero h2{margin:14px 0 8px;font-size:2rem;line-height:1.2}
+.hero p{color:var(--muted);font-size:1.05rem}
+
+/* Flow bar */
+.flow-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:20px 0}
+.flow-bar div{text-align:center;padding:12px 6px;border-radius:12px;font-size:.82rem;font-weight:700;border:1px solid var(--line);background:#fff}
+.flow-bar .active{background:var(--blue-bg);border-color:var(--blue-border);color:var(--blue)}
+
+/* Cards / Steps */
+.card{margin-bottom:24px;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);box-shadow:var(--shadow)}
+.card h3{font-size:1.4rem;margin-bottom:4px}
+.card .subtitle{color:var(--muted);font-size:.92rem;margin-bottom:16px}
+
+.step{margin-bottom:28px;padding:26px;border:1px solid var(--line);border-radius:20px;background:var(--panel);box-shadow:var(--shadow)}
+.step-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+.step-header h3{font-size:1.45rem}
+.step-number{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;font-size:1rem;margin-right:10px;flex-shrink:0}
+.time-badge{white-space:nowrap;padding:7px 14px;border-radius:999px;background:var(--blue-bg);border:1px solid var(--blue-border);color:var(--brand);font-weight:700;font-size:.88rem}
+
+/* Action panels */
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.action-panel{padding:16px;border-radius:14px;border:1px solid var(--line);background:#fdfdfe}
+.action-panel h4{margin-bottom:8px;font-size:.88rem;text-transform:uppercase;letter-spacing:.04em}
+.action-panel ul{padding-left:18px;margin:0}.action-panel li{margin:4px 0}
+.action-panel p{margin:0}
+.do{border-color:var(--green-border);background:var(--green-bg)}.do h4{color:var(--green)}
+.say{border-color:var(--blue-border);background:var(--blue-bg)}.say h4{color:var(--blue)}
+.expect{border-color:var(--orange-border);background:var(--orange-bg)}.expect h4{color:var(--orange)}
+.aha{border-color:var(--purple-border);background:var(--purple-bg)}.aha h4{color:var(--purple)}
+.fallback{border-color:var(--red-border);background:var(--red-bg)}.fallback h4{color:var(--red)}
+.tip{border-color:var(--teal-border);background:var(--teal-bg)}.tip h4{color:var(--teal)}
+
+/* Aha callout */
+.aha-callout{margin:16px 0;padding:16px 18px;border-left:5px solid var(--accent);background:#fffbeb;border-radius:0 12px 12px 0;font-weight:600}
+.aha-callout .emoji{font-size:1.2rem;margin-right:6px}
+
+/* Code blocks */
+code{font:14px/1.4 Consolas,'Courier New',monospace;background:#1e293b;color:#e2e8f0;padding:2px 7px;border-radius:6px}
+pre{background:#1e293b;color:#e2e8f0;padding:16px;border-radius:12px;overflow-x:auto;margin:10px 0}
+pre code{background:transparent;padding:0}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:12px 0}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line)}
+th{background:#f8fafc;font-weight:700;font-size:.88rem;text-transform:uppercase;letter-spacing:.03em}
+
+/* Checklist */
+.checklist{list-style:none;padding:0}
+.checklist li{padding:8px 0 8px 28px;position:relative;border-bottom:1px solid #f1f5f9}
+.checklist li::before{content:"☐";position:absolute;left:0;font-size:1.1rem}
+.checklist li.done::before{content:"☑";color:var(--green)}
+
+/* Responsive */
+@media(max-width:1000px){.sidebar{position:static;width:auto;border-right:0;border-bottom:1px solid var(--line)}.main{margin:0;padding:20px}.action-grid{grid-template-columns:1fr}.flow-bar{grid-template-columns:repeat(3,1fr)}}
+@media print{.sidebar{position:static;width:auto;border:0}.main{margin:0;padding:0}.nav{display:none}.step,.card,.hero{break-inside:avoid;box-shadow:none}}
+</style>
+</head>
+<body>
+
+<!-- ==================== SIDEBAR ==================== -->
+<aside class="sidebar">
+  <div class="logo-block">
+    <h1>🏗️ BrandSafway<br>Developer Agent Demo</h1>
+    <p>End-to-end demo sequence guide<br>45-minute session</p>
+  </div>
+
+  <nav class="nav">
+    <div class="section-label">Preparation</div>
+    <a href="#pre-demo">Pre-Demo Checklist</a>
+    <a href="#timing">Timing Breakdown</a>
+
+    <div class="section-label">Demo Sequence</div>
+    <a href="#step1">1. ADO Work Item</a>
+    <a href="#step2">2. GitHub Issue + Link</a>
+    <a href="#step3">3. Assign Copilot Agent</a>
+    <a href="#step4">4. Agent Creates Branch</a>
+    <a href="#step5">5. Agent Develops Code</a>
+    <a href="#step6">6. Agent Commits + Tests</a>
+    <a href="#step7">7. Agent Raises PR</a>
+    <a href="#step8">8. Human Review + Approve</a>
+    <a href="#step9">9. Pipeline Validates</a>
+    <a href="#step10">10. Merge + Deploy</a>
+
+    <div class="section-label">Bonus</div>
+    <a href="#ghas">GitHub Advanced Security</a>
+    <a href="#aha-summary">Aha Moments Summary</a>
+    <a href="#wrap">Wrap-Up &amp; Next Steps</a>
+  </nav>
+
+  <div class="url-box">
+    <strong>🔗 Demo URLs</strong>
+    <code><strong>ADO:</strong> https://dev.azure.com/brandsafway1/Project1</code>
+    <code><strong>GitHub:</strong> github.com/sautalwar/brandsafway-copilot-demo</code>
+    <code><strong>ADO Boards:</strong> https://dev.azure.com/brandsafway1/Project1/_boards/board/t/</code>
+    <code><strong>ADO Pipelines:</strong> https://dev.azure.com/brandsafway1/Project1/_build</code>
+  </div>
+</aside>
+
+<!-- ==================== MAIN CONTENT ==================== -->
+<main class="main">
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <span class="eyebrow">BrandSafway · GitHub Copilot · Azure DevOps</span>
+  <h2>End-to-End Developer Agent Demo Sequence</h2>
+  <p>Move one business request from an Azure DevOps backlog item to shipped, validated code — with GitHub Copilot doing the heavy lifting while humans stay in control.</p>
+
+  <div class="flow-bar">
+    <div>📋 ADO Work Item</div>
+    <div>🤖 Copilot Agent</div>
+    <div>🔀 Pull Request</div>
+    <div>✅ Pipeline Validates</div>
+    <div>🚀 Merge &amp; Deploy</div>
+  </div>
+</section>
+
+<!-- ==================== PRE-DEMO CHECKLIST ==================== -->
+<section class="card" id="pre-demo">
+  <h3>🔧 Pre-Demo Setup Checklist</h3>
+  <p class="subtitle">Complete these before the audience joins. Aim for 15 minutes prep time.</p>
+
+  <div class="action-grid">
+    <div class="action-panel tip">
+      <h4>🖥️ Environment</h4>
+      <ul class="checklist">
+        <li>ADO project open: <code>https://dev.azure.com/brandsafway1/Project1</code></li>
+        <li>GitHub repo open: <code>github.com/sautalwar/brandsafway-copilot-demo</code></li>
+        <li>VS Code open with repo loaded + Copilot Chat visible</li>
+        <li>Terminal open in repo root — run <code>npm test</code> to confirm 6/6 pass</li>
+        <li>Browser tabs arranged: ADO Boards → GitHub Repo → GitHub Actions → ADO Pipelines</li>
+      </ul>
+    </div>
+    <div class="action-panel tip">
+      <h4>✅ Configuration</h4>
+      <ul class="checklist">
+        <li>GitHub Copilot coding agent enabled for the repo</li>
+        <li>ADO ↔ GitHub connection active (Project Settings → GitHub connections)</li>
+        <li>Branch protection rules on <code>main</code> (require PR, 1 reviewer, CI checks)</li>
+        <li>ADO Pipeline connected to repo (uses <code>azure-pipelines.yml</code>)</li>
+        <li>GHAS features enabled: Dependabot, CodeQL, Secret scanning</li>
+        <li>Labels exist on repo: <code>copilot-agent</code>, <code>ado-synced</code>, <code>severity:high</code></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="action-panel do" style="margin-top:14px">
+    <h4>🎯 Demo Task to Prepare</h4>
+    <p>The demo will use this enhancement request:<br>
+    <strong>"Add a <code>GET /api/inspections/stats</code> endpoint that returns summary statistics — total count, count by status, count by severity, and recent inspection count."</strong><br><br>
+    This TODO already exists in <code>src/app.js</code>. The Copilot agent will implement it, write tests, and raise a PR — all autonomously.</p>
+  </div>
+</section>
+
+<!-- ==================== TIMING ==================== -->
+<section class="card" id="timing">
+  <h3>⏱️ Timing Breakdown — 45 Minutes</h3>
+  <table>
+    <thead><tr><th>Segment</th><th>Time</th><th>Running Total</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Opening + Context</strong> — Why this matters</td><td>3 min</td><td>3 min</td></tr>
+      <tr><td><strong>Step 1:</strong> Create ADO Work Item</td><td>3 min</td><td>6 min</td></tr>
+      <tr><td><strong>Step 2:</strong> Create GitHub Issue + Link</td><td>3 min</td><td>9 min</td></tr>
+      <tr><td><strong>Step 3:</strong> Assign Copilot Agent</td><td>2 min</td><td>11 min</td></tr>
+      <tr><td><strong>Steps 4-6:</strong> Agent works (branch → code → tests)</td><td>8 min</td><td>19 min</td></tr>
+      <tr><td><strong>Step 7:</strong> Agent raises PR</td><td>3 min</td><td>22 min</td></tr>
+      <tr><td><strong>Step 8:</strong> Human review + approve</td><td>5 min</td><td>27 min</td></tr>
+      <tr><td><strong>Step 9:</strong> Pipeline validates</td><td>4 min</td><td>31 min</td></tr>
+      <tr><td><strong>Step 10:</strong> Merge + deploy</td><td>3 min</td><td>34 min</td></tr>
+      <tr style="background:var(--purple-bg)"><td><strong>Bonus:</strong> GitHub Advanced Security</td><td>6 min</td><td>40 min</td></tr>
+      <tr><td><strong>Wrap-up + Q&A</strong></td><td>5 min</td><td>45 min</td></tr>
+    </tbody>
+  </table>
+
+  <div class="aha-callout">
+    <span class="emoji">💡</span> Pro tip: The Copilot agent takes 2–5 minutes to produce a PR. Use Steps 4-6 time to show the <code>copilot-instructions.md</code> and talk about guardrails. Fill dead air with VS Code Copilot Chat demos.
+  </div>
+</section>
+
+<!-- ==================== STEP 1 ==================== -->
+<section class="step" id="step1">
+  <div class="step-header">
+    <h3><span class="step-number">1</span> Create ADO Work Item</h3>
+    <span class="time-badge">3 min</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>Open <a href="https://dev.azure.com/brandsafway1/Project1/_boards/board/t/" target="_blank">ADO Boards</a></li>
+        <li>Click <strong>+ New Work Item → User Story</strong></li>
+        <li>Title: <code>Add inspection statistics endpoint to Safety Tracker API</code></li>
+        <li>Description: "As a safety manager, I need a summary statistics endpoint so I can see total inspections, breakdowns by status and severity, and recent activity at a glance."</li>
+        <li>Set: Priority = 2, Severity = Medium, Iteration = current sprint</li>
+        <li><strong>Note the Work Item ID</strong> (e.g., <code>42</code>) — you'll need this</li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"This is where every request starts — right here in Azure DevOps, where your teams already plan and track work. Nothing changes about your planning process. The difference is what happens <em>next</em>."</p>
+    </div>
+  </div>
+
+  <div class="aha-callout">
+    <span class="emoji">✨</span> <strong>Aha Moment:</strong> "Your existing ADO workflow is the starting point — we're not replacing it, we're accelerating everything downstream."
+  </div>
+</section>
+
+<!-- ==================== STEP 2 ==================== -->
+<section class="step" id="step2">
+  <div class="step-header">
+    <h3><span class="step-number">2</span> Create GitHub Issue + ADO Link</h3>
+    <span class="time-badge">3 min</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>Open <a href="https://github.com/sautalwar/brandsafway-copilot-demo/issues/new" target="_blank">GitHub → New Issue</a></li>
+        <li>Title: <code>Add GET /api/inspections/stats endpoint AB#42</code><br><em>(replace 42 with your actual work item ID)</em></li>
+        <li>Body:
+          <pre><code>## Description
+Add a `GET /api/inspections/stats` endpoint that returns summary statistics.
+
+## Acceptance Criteria
+- Returns `total` count of all inspections
+- Returns `byStatus` object with counts per status (open, in-review, closed, scheduled)
+- Returns `bySeverity` object with counts per severity (low, medium, high)
+- Returns `recentCount` of inspections from last 30 days
+- All new code covered by Jest + Supertest tests
+
+## Azure DevOps Reference
+AB#42 — https://dev.azure.com/brandsafway1/Project1/_workitems/edit/42</code></pre>
+        </li>
+        <li>Add label: <code>copilot-agent</code></li>
+        <li>Click <strong>Submit new issue</strong></li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"Notice the <code>AB#42</code> in the title — that's the magic link. Azure Boards automatically picks this up and connects the GitHub issue to the ADO work item. Open your ADO work item and you'll see it in the Development section. Two systems, one source of truth."</p>
+    </div>
+  </div>
+
+  <div class="action-grid" style="margin-top:14px">
+    <div class="action-panel expect">
+      <h4>🟡 Expect</h4>
+      <ul>
+        <li>GitHub issue created with <code>copilot-agent</code> label</li>
+        <li>ADO work item's Development panel shows the linked GitHub issue</li>
+        <li>The <code>auto-assign-copilot.yml</code> workflow fires automatically</li>
+      </ul>
+    </div>
+    <div class="action-panel aha">
+      <h4>💡 Aha Moment</h4>
+      <p><strong>"Zero manual linking"</strong> — the <code>AB#</code> pattern gives you full traceability between ADO and GitHub with no copy-paste, no context switching. Your compliance and audit trail is built-in.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STEP 3 ==================== -->
+<section class="step" id="step3">
+  <div class="step-header">
+    <h3><span class="step-number">3</span> Copilot Agent Gets Assigned</h3>
+    <span class="time-badge">2 min</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>Show the issue page — point out the <code>copilot-agent</code> label</li>
+        <li>Click <strong>Actions</strong> tab → show the <code>auto-assign-copilot</code> workflow running</li>
+        <li>Return to the issue — Copilot should now be listed as assignee</li>
+        <li>Show the automated comment: "🤖 GitHub Copilot coding agent has been assigned…"</li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"The moment we added the <code>copilot-agent</code> label, a GitHub Actions workflow automatically assigned Copilot as the developer. This is the trigger — the agent is now reading the issue, understanding the codebase, and planning its implementation. No human developer needed to pick this up."</p>
+    </div>
+  </div>
+
+  <div class="aha-callout">
+    <span class="emoji">✨</span> <strong>Aha Moment:</strong> "A label is all it takes. Your team decides <em>which</em> work goes to the agent — Copilot handles the <em>how</em>. Human judgment drives what gets automated."
+  </div>
+</section>
+
+<!-- ==================== STEP 4 ==================== -->
+<section class="step" id="step4">
+  <div class="step-header">
+    <h3><span class="step-number">4</span> Agent Creates a Branch</h3>
+    <span class="time-badge">Part of 8 min block</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>On the issue page, look for the Copilot agent's session link / activity indicator</li>
+        <li>Click into the Copilot coding agent session to show live progress</li>
+        <li>Point out: the agent created a branch (e.g., <code>copilot/7-add-stats-endpoint</code>)</li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"The agent follows our branch naming convention from <code>copilot-instructions.md</code> — same standards your developers follow. It branched from <code>main</code>, just like any team member would."</p>
+    </div>
+  </div>
+
+  <div class="action-panel tip" style="margin-top:14px">
+    <h4>💬 Fill Time — Show Copilot Instructions</h4>
+    <p>While the agent works, open <code>.github/copilot-instructions.md</code> in VS Code and walk through it:<br>
+    "This is our guardrails file. It tells the agent our coding standards, testing requirements, how to name branches, how to format commits with <code>AB#</code> references, and security rules. Think of it as your team's coding playbook — but for AI."</p>
+  </div>
+</section>
+
+<!-- ==================== STEP 5 ==================== -->
+<section class="step" id="step5">
+  <div class="step-header">
+    <h3><span class="step-number">5</span> Agent Develops the Enhancement</h3>
+    <span class="time-badge">Part of 8 min block</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>Show the agent's live coding session (if visible in the Copilot UI)</li>
+        <li>Narrate what the agent is doing: reading the existing code, understanding the data model, implementing the stats endpoint</li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"Watch what's happening — the agent read the issue, then explored <code>src/app.js</code> and <code>src/data/inspections.js</code> to understand the existing patterns. Now it's writing the stats endpoint following the same Express patterns already in the codebase. It's not just generating code — it's <em>understanding context</em>."</p>
+    </div>
+  </div>
+
+  <div class="action-panel tip" style="margin-top:14px">
+    <h4>💬 Fill Time — VS Code Copilot Demo</h4>
+    <p>While waiting, switch to VS Code and demonstrate:</p>
+    <ul>
+      <li><strong>Copilot Chat:</strong> Ask "Explain the inspection data model" → shows Copilot understands the codebase</li>
+      <li><strong>Copilot CLI:</strong> In terminal, show <code>gh copilot suggest "how to add a new route in Express"</code></li>
+      <li><strong>Inline Completions:</strong> Start typing a new function in <code>app.js</code> — show ghost text suggestions</li>
+    </ul>
+    <p><em>"Three surfaces — Chat, CLI, and inline — same AI, same context. Your developers get help wherever they work."</em></p>
+  </div>
+</section>
+
+<!-- ==================== STEP 6 ==================== -->
+<section class="step" id="step6">
+  <div class="step-header">
+    <h3><span class="step-number">6</span> Agent Commits Code + Tests</h3>
+    <span class="time-badge">Part of 8 min block</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>Show the agent's commit(s) on the branch — click the branch name on GitHub</li>
+        <li>Point out: commit messages include <code>AB#42</code> reference</li>
+        <li>Show the test file changes — the agent wrote tests, not just production code</li>
+        <li>Highlight: the agent ran <code>npm test</code> and confirmed all tests pass before proceeding</li>
+      </ul>
+    </div>
+    <div class="action-panel aha">
+      <h4>💡 Aha Moment</h4>
+      <p><strong>"Tests are not optional"</strong> — the <code>copilot-instructions.md</code> requires tests for every change, and the agent follows that rule. Same quality bar as your human developers, enforced automatically.</p>
+    </div>
+  </div>
+
+  <div class="aha-callout">
+    <span class="emoji">✨</span> <strong>Aha Moment:</strong> "The commit message says <code>AB#42</code>. Go back to your ADO work item — you'll see this commit linked in the Development panel. Full traceability, zero effort."
+  </div>
+</section>
+
+<!-- ==================== STEP 7 ==================== -->
+<section class="step" id="step7">
+  <div class="step-header">
+    <h3><span class="step-number">7</span> Agent Raises a Pull Request</h3>
+    <span class="time-badge">3 min</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>Open the PR the agent created — navigate to <strong>Pull Requests</strong> tab</li>
+        <li>Walk through the PR description:
+          <ul>
+            <li>Summary of changes</li>
+            <li><code>Closes #&lt;issue&gt;</code> reference</li>
+            <li><code>AB#42</code> ADO reference</li>
+            <li>Testing section describing what was tested</li>
+          </ul>
+        </li>
+        <li>Show that CI checks are already running (GitHub Actions)</li>
+        <li>Show that the ADO pipeline was also triggered</li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"The agent didn't just dump code into a PR — it wrote a proper description, linked the issue, referenced the ADO work item, and described its testing. This PR looks exactly like what you'd expect from a senior developer. And it triggered both your GitHub CI <em>and</em> your Azure DevOps pipeline automatically."</p>
+    </div>
+  </div>
+
+  <div class="aha-callout">
+    <span class="emoji">✨</span> <strong>Aha Moment:</strong> "Look at this PR. If I hadn't told you, could you tell an AI wrote it? That's the point — same process, same quality, same traceability. Just faster."
+  </div>
+</section>
+
+<!-- ==================== STEP 8 ==================== -->
+<section class="step" id="step8">
+  <div class="step-header">
+    <h3><span class="step-number">8</span> Human Reviews + Approves</h3>
+    <span class="time-badge">5 min</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>Click <strong>Files changed</strong> on the PR</li>
+        <li>Walk through the code changes — show the stats endpoint implementation</li>
+        <li>Show the test coverage — verify it tests each statistic field</li>
+        <li>Optionally leave a review comment on a specific line to show the feedback flow</li>
+        <li>Click <strong>Review changes → Approve</strong></li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"This is the <strong>human-in-the-loop</strong> moment. The agent wrote the code, but a human — your dev lead — reviews and approves. Branch protection rules enforce this: no PR merges without at least one human approval and all CI checks passing. The AI accelerates; humans govern."</p>
+    </div>
+  </div>
+
+  <div class="action-grid" style="margin-top:14px">
+    <div class="action-panel aha">
+      <h4>💡 Aha Moment</h4>
+      <p><strong>"Human-in-the-loop by design"</strong> — Copilot can't bypass your review process. Branch protection is enforced for everyone, including AI agents. Your governance stays intact.</p>
+    </div>
+    <div class="action-panel tip">
+      <h4>💬 Talking Point</h4>
+      <p>"Think about what just happened: your developer's job shifted from <em>writing</em> code to <em>reviewing</em> code. They're now focused on quality, architecture, and business logic — the high-value work."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STEP 9 ==================== -->
+<section class="step" id="step9">
+  <div class="step-header">
+    <h3><span class="step-number">9</span> ADO Pipeline Validates</h3>
+    <span class="time-badge">4 min</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>Open <a href="https://dev.azure.com/brandsafway1/Project1/_build" target="_blank">ADO Pipelines</a></li>
+        <li>Show the pipeline run triggered by the PR</li>
+        <li>Walk through the stages:
+          <ul>
+            <li><strong>Build & Test</strong> — npm ci, npm test (all tests pass), lint</li>
+            <li><strong>Security Scan</strong> — npm audit for dependency vulnerabilities</li>
+            <li><strong>Deploy</strong> — will run on merge to main</li>
+          </ul>
+        </li>
+        <li>Switch back to GitHub — show the ADO pipeline check status on the PR</li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"Your existing Azure DevOps pipeline is part of the quality gate. GitHub CI runs the tests, ADO pipeline validates independently — two checkpoints, both must pass. The agent's code gets the same scrutiny as any developer's code. No shortcuts."</p>
+    </div>
+  </div>
+
+  <div class="aha-callout">
+    <span class="emoji">✨</span> <strong>Aha Moment:</strong> "Same pipeline, same rules, same checks. The agent doesn't get a free pass — it earns its merge the same way your developers do."
+  </div>
+</section>
+
+<!-- ==================== STEP 10 ==================== -->
+<section class="step" id="step10">
+  <div class="step-header">
+    <h3><span class="step-number">10</span> Merge + Deploy</h3>
+    <span class="time-badge">3 min</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do</h4>
+      <ul>
+        <li>On the PR page, all checks show green ✅</li>
+        <li>Click <strong>Merge pull request</strong> → <strong>Confirm merge</strong></li>
+        <li>Show the issue auto-closes (because of <code>Closes #&lt;issue&gt;</code>)</li>
+        <li>Open the ADO work item → show the PR and merge commit linked in Development</li>
+        <li>Show the Deploy stage kicks off in ADO Pipelines</li>
+      </ul>
+    </div>
+    <div class="action-panel say">
+      <h4>🔵 Say</h4>
+      <p>"And that's the full loop. ADO work item → GitHub issue → Copilot agent → branch → code → tests → PR → human review → pipeline validation → merge → deployment. Every step traceable, every step governed, every step auditable. What used to take a developer a day just happened in minutes."</p>
+    </div>
+  </div>
+
+  <div class="aha-callout">
+    <span class="emoji">🎯</span> <strong>Key Aha Moment:</strong> "Look at the ADO work item now. It shows the linked issue, the branch, every commit, the PR, the pipeline result, and the deployment. Full end-to-end traceability — from backlog to production — and the developer didn't write a single line of code manually."
+  </div>
+
+  <div class="action-panel tip" style="margin-top:14px">
+    <h4>📊 The Big Picture</h4>
+    <p>Open ADO and GitHub side by side. Show the complete audit trail:<br>
+    <strong>ADO Work Item</strong> → linked GitHub Issue → linked Branch → linked Commits → linked PR → Pipeline Run → Deployment<br><br>
+    <em>"This isn't just speed. This is compliance. This is auditability. This is how regulated industries like yours should be adopting AI."</em></p>
+  </div>
+</section>
+
+<!-- ==================== GHAS BONUS ==================== -->
+<section class="step" id="ghas">
+  <div class="step-header">
+    <h3>⭐ Bonus: GitHub Advanced Security</h3>
+    <span class="time-badge">6 min</span>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-panel do">
+      <h4>🟢 Do — Dependabot</h4>
+      <ul>
+        <li>Open repo <strong>Security</strong> tab → <strong>Dependabot alerts</strong></li>
+        <li>Show any existing alerts for npm dependencies</li>
+        <li>Open <code>.github/dependabot.yml</code> — show the automated PR schedule</li>
+        <li><em>"Dependabot doesn't just alert — it opens PRs with the fix."</em></li>
+      </ul>
+    </div>
+    <div class="action-panel do">
+      <h4>🟢 Do — CodeQL</h4>
+      <ul>
+        <li>Open <strong>Security</strong> tab → <strong>Code scanning</strong></li>
+        <li>Show the CodeQL workflow in <strong>Actions</strong> tab</li>
+        <li>If any findings exist, walk through one</li>
+        <li><em>"Every PR — including Copilot's — gets scanned for vulnerabilities before it can merge."</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="action-grid" style="margin-top:14px">
+    <div class="action-panel do">
+      <h4>🟢 Do — Secret Scanning</h4>
+      <ul>
+        <li>Open repo <strong>Settings → Code security → Secret scanning</strong></li>
+        <li>Show it's enabled — GitHub scans every push for leaked credentials</li>
+        <li><em>"If anyone — human or AI — accidentally commits an API key, it gets caught instantly."</em></li>
+      </ul>
+    </div>
+    <div class="action-panel aha">
+      <h4>💡 Aha Moment</h4>
+      <p><strong>"Shift-left security, automated"</strong> — Three layers of security scanning run on every change: dependency vulnerabilities (Dependabot), code vulnerabilities (CodeQL), and credential leaks (Secret Scanning). The Copilot agent's code gets the same security treatment as any developer's.</p>
+    </div>
+  </div>
+
+  <div class="aha-callout">
+    <span class="emoji">🛡️</span> <strong>Aha Moment:</strong> "You're not choosing between speed and security. GitHub Advanced Security means AI-written code gets <em>more</em> scrutiny, not less. Security scales with velocity."
+  </div>
+</section>
+
+<!-- ==================== AHA MOMENTS SUMMARY ==================== -->
+<section class="card" id="aha-summary">
+  <h3>💎 Aha Moments — Quick Reference</h3>
+  <p class="subtitle">The key moments where the audience should feel the value.</p>
+
+  <table>
+    <thead><tr><th>#</th><th>Step</th><th>Aha Moment</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>ADO Work Item</td><td><strong>Your existing workflow is the starting point</strong> — nothing to change, everything to gain</td></tr>
+      <tr><td>2</td><td>GitHub Issue Link</td><td><strong>Zero manual linking</strong> — <code>AB#</code> gives full traceability with no effort</td></tr>
+      <tr><td>3</td><td>Assign Copilot</td><td><strong>A label is all it takes</strong> — humans decide what gets automated</td></tr>
+      <tr><td>6</td><td>Commits + Tests</td><td><strong>Tests are not optional</strong> — same quality bar, enforced by config</td></tr>
+      <tr><td>7</td><td>PR Raised</td><td><strong>Indistinguishable from a senior dev's PR</strong> — proper description, links, testing</td></tr>
+      <tr><td>8</td><td>Human Review</td><td><strong>Human-in-the-loop by design</strong> — AI accelerates, humans govern</td></tr>
+      <tr><td>9</td><td>Pipeline Validates</td><td><strong>Same rules, no shortcuts</strong> — the agent earns its merge</td></tr>
+      <tr><td>10</td><td>Merge + Deploy</td><td><strong>Full audit trail</strong> — backlog to production, every step traceable</td></tr>
+      <tr><td>⭐</td><td>GHAS Bonus</td><td><strong>Speed doesn't compromise security</strong> — three layers of automated scanning</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ==================== WRAP-UP ==================== -->
+<section class="card" id="wrap">
+  <h3>🎬 Wrap-Up + Next Steps</h3>
+
+  <div class="action-grid">
+    <div class="action-panel say">
+      <h4>🔵 Closing Statement</h4>
+      <p>"Let's recap what we just saw: A business request moved from your Azure DevOps board to production code in under 30 minutes. The Copilot agent wrote the code, wrote the tests, followed your standards, created a proper PR, and passed every checkpoint — security scanning, CI pipeline, human review. Your developers' role shifted from writing code to reviewing code. That's not replacing developers — that's <strong>amplifying</strong> them."</p>
+    </div>
+    <div class="action-panel tip">
+      <h4>🎯 Suggested Next Steps</h4>
+      <ul>
+        <li>Pilot with 2-3 developers on a non-critical repo</li>
+        <li>Start with the manual-assign path (label-based)</li>
+        <li>Measure: time from issue to merged PR</li>
+        <li>Expand: add more repos, more teams, more task types</li>
+        <li>Advanced: ADO webhook → full automation pipeline</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="action-panel aha" style="margin-top:14px">
+    <h4>🏆 The One-Liner</h4>
+    <p style="font-size:1.15rem">"Same tools. Same process. Same governance. Dramatically faster delivery."</p>
+  </div>
+</section>
+
+<!-- ==================== FALLBACK PLANS ==================== -->
+<section class="card" id="fallbacks">
+  <h3>🔴 Fallback Plans</h3>
+  <p class="subtitle">If something doesn't work live — stay calm and use these.</p>
+
+  <table>
+    <thead><tr><th>If This Fails…</th><th>Do This Instead</th></tr></thead>
+    <tbody>
+      <tr><td>Copilot agent doesn't pick up the issue</td><td>Show a pre-prepared branch with the completed work. Say: "The agent typically picks this up in 1-2 minutes. Let me show you a completed example."</td></tr>
+      <tr><td>Agent takes too long (>5 min)</td><td>Continue with VS Code Copilot demos (Chat, CLI, inline). Check back in 2 minutes.</td></tr>
+      <tr><td>ADO ↔ GitHub link doesn't show</td><td>Refresh the ADO work item. The link can take 30-60 seconds to appear. Have a screenshot ready.</td></tr>
+      <tr><td>Pipeline fails</td><td>Show the logs, explain what failed, and use it as a teaching moment: "This is exactly why we have CI — even AI-generated code gets caught by the same checks."</td></tr>
+      <tr><td>GHAS has no findings</td><td>That's actually good! Say: "No findings means the code is clean — which is what we want. Let me show you what a finding looks like." Show a CodeQL docs screenshot.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+</body>
+</html>

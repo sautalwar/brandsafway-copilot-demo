@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BrandSafway Setup Guide — Manual ADO + Auto-Assign Copilot Path</title>
+<style>
+:root{
+  --bg:#f8fafc;
+  --panel:#ffffff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --line:#e2e8f0;
+  --brand:#0f3d75;
+  --brand-light:#1e5aad;
+  --green:#15803d;
+  --green-bg:#f0fdf4;
+  --green-border:#bbf7d0;
+  --blue:#2563eb;
+  --blue-bg:#eff6ff;
+  --blue-border:#bfdbfe;
+  --orange:#ea580c;
+  --orange-bg:#fff7ed;
+  --orange-border:#fed7aa;
+  --shadow:0 8px 28px rgba(15,23,42,.08);
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font:16px/1.65 'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink)}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font:13px/1.45 Consolas,'Courier New',monospace;background:#e2e8f0;color:#0f172a;padding:2px 6px;border-radius:6px;word-break:break-word}
+pre{margin:12px 0 0;background:#0f172a;color:#e2e8f0;padding:16px;border-radius:14px;overflow:auto}
+pre code{background:transparent;color:inherit;padding:0}
+ul,ol{padding-left:22px}
+li{margin:6px 0}
+
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:300px;overflow-y:auto;padding:24px 20px;background:#fff;border-right:1px solid var(--line)}
+.main{margin-left:300px;padding:32px 36px 64px;max-width:1120px}
+.logo-block,.url-box,.quick-card,.card,.step{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.logo-block{padding:18px 16px;margin-bottom:18px;background:linear-gradient(135deg,#ffffff,#f1f5f9)}
+.logo-block h1{font-size:1.3rem;line-height:1.2;color:var(--brand)}
+.logo-block p{margin-top:8px;color:var(--muted);font-size:.92rem}
+.nav{display:flex;flex-direction:column;gap:4px}
+.nav .section-label{margin-top:14px;padding:4px 12px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.nav a{display:block;padding:9px 12px;border-radius:10px;color:var(--ink);border:1px solid transparent;font-size:.94rem}
+.nav a:hover{background:var(--blue-bg);border-color:var(--blue-border);text-decoration:none}
+.url-box,.quick-card{margin-top:18px;padding:14px}
+.url-box strong,.quick-card strong{display:block;margin-bottom:8px;color:var(--brand)}
+.url-box code{display:block;margin:6px 0;background:#f1f5f9}
+
+.hero{padding:28px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,#ffffff 0%,#eff6ff 100%);box-shadow:var(--shadow);margin-bottom:26px}
+.eyebrow{display:inline-block;padding:5px 12px;border-radius:999px;background:var(--blue-bg);color:var(--brand);font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.hero h2{font-size:2.1rem;line-height:1.15;margin:14px 0 10px}
+.hero p{color:var(--muted);font-size:1.02rem}
+.flow-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}
+.flow-bar div{padding:12px 10px;text-align:center;border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:700;font-size:.88rem}
+
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{padding:24px;margin-bottom:24px}
+.card h3{font-size:1.45rem;margin-bottom:6px}
+.card .subtitle{color:var(--muted);margin-bottom:16px}
+.step{padding:24px;margin-bottom:24px}
+.step-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}
+.step-header h3{font-size:1.45rem;line-height:1.2}
+.step-number{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;margin-right:10px;vertical-align:middle}
+.time-badge{white-space:nowrap;padding:7px 14px;border-radius:999px;background:var(--blue-bg);border:1px solid var(--blue-border);color:var(--brand);font-size:.88rem;font-weight:700}
+.panel{padding:16px;border-radius:14px;border:1px solid var(--line);margin:12px 0}
+.panel h4{margin-bottom:8px;font-size:.9rem;text-transform:uppercase;letter-spacing:.05em}
+.panel.green{background:var(--green-bg);border-color:var(--green-border)}
+.panel.green h4{color:var(--green)}
+.panel.blue{background:var(--blue-bg);border-color:var(--blue-border)}
+.panel.blue h4{color:var(--blue)}
+.panel.orange{background:var(--orange-bg);border-color:var(--orange-border)}
+.panel.orange h4{color:var(--orange)}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f8fafc;font-size:.82rem;text-transform:uppercase;letter-spacing:.05em}
+.checklist{list-style:none;padding-left:0}
+.checklist li{position:relative;padding:8px 0 8px 28px;border-bottom:1px solid #f1f5f9}
+.checklist li::before{content:'✓';position:absolute;left:0;top:8px;color:var(--green);font-weight:700}
+.muted{color:var(--muted)}
+.print-note{margin-top:12px;color:var(--muted);font-size:.92rem}
+
+@media (max-width: 1020px){
+  .sidebar{position:static;width:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .main{margin:0;padding:20px}
+  .grid-2,.grid-3,.flow-bar{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff}
+  .sidebar{position:static;width:auto;border:0;padding:0 0 16px;background:#fff}
+  .nav{display:none}
+  .main{margin:0;padding:0}
+  .hero,.card,.step,.logo-block,.url-box,.quick-card{box-shadow:none;break-inside:avoid}
+  a{text-decoration:none;color:inherit}
+}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="logo-block">
+    <h1>⚙️ BrandSafway<br>Manual ADO + Auto-Assign Path</h1>
+    <p>Professional setup guide for the simpler GitHub Copilot coding agent flow.</p>
+  </div>
+
+  <nav class="nav">
+    <div class="section-label">Guide</div>
+    <a href="#overview">1. Overview</a>
+    <a href="#prerequisites">2. Prerequisites</a>
+    <a href="#ado-work-item">3. Create an ADO Work Item</a>
+    <a href="#github-issue">4. Create a GitHub Issue</a>
+    <a href="#automatic-flow">5. What Happens Automatically</a>
+    <a href="#verify">6. Verifying the Flow</a>
+    <a href="#labels">7. Label Management</a>
+    <a href="#troubleshooting">8. Troubleshooting</a>
+  </nav>
+
+  <div class="url-box">
+    <strong>Key URLs</strong>
+    <code>ADO Project: https://dev.azure.com/brandsafway1/Project1</code>
+    <code>ADO Boards: https://dev.azure.com/brandsafway1/Project1/_boards/board/t/</code>
+    <code>GitHub Repo: https://github.com/sautalwar/brandsafway-copilot-demo</code>
+    <code>New Issue: https://github.com/sautalwar/brandsafway-copilot-demo/issues/new</code>
+  </div>
+
+  <div class="quick-card">
+    <strong>When to use this path</strong>
+    <p class="muted">Best for demos, pilots, and smaller teams that want lightweight setup with clear traceability.</p>
+  </div>
+</aside>
+
+<main class="main">
+  <section class="hero" id="top">
+    <span class="eyebrow">BrandSafway · GitHub Copilot · Azure DevOps</span>
+    <h2>Manual Azure DevOps intake + automatic GitHub Copilot assignment</h2>
+    <p>Create the Azure DevOps work item yourself, create the GitHub issue yourself, add the <code>copilot-agent</code> label, and let <code>.github/workflows/auto-assign-copilot.yml</code> assign the Copilot coding agent automatically.</p>
+    <div class="flow-bar">
+      <div>1. Create ADO work item</div>
+      <div>2. Create GitHub issue</div>
+      <div>3. Workflow assigns Copilot</div>
+      <div>4. Copilot opens PR</div>
+    </div>
+  </section>
+
+  <section class="card" id="overview">
+    <h3>1. Overview</h3>
+    <p class="subtitle">A simpler, lower-friction path for getting from backlog item to working pull request.</p>
+
+    <div class="grid-2">
+      <div class="panel blue">
+        <h4>What this path does</h4>
+        <p>Manual Azure DevOps work item + manual GitHub issue + <code>copilot-agent</code> label → the <code>auto-assign-copilot.yml</code> workflow assigns GitHub Copilot to the issue automatically.</p>
+      </div>
+      <div class="panel green">
+        <h4>Why teams choose it</h4>
+        <p>It is faster to set up, easier to explain in a live demo, and a strong fit for smaller teams that do not need full issue synchronization automation.</p>
+      </div>
+    </div>
+
+    <div class="panel orange">
+      <h4>When to use this vs. the full automation path</h4>
+      <p>Use this page when you want the simplest workable flow. Use <code>setup-ado-sync.html</code> when you want the fuller automation story with more orchestration between Azure DevOps and GitHub. For most demos, this manual-start / automated-assignment path is cleaner and more reliable.</p>
+    </div>
+  </section>
+
+  <section class="card" id="prerequisites">
+    <h3>2. Prerequisites</h3>
+    <p class="subtitle">Complete these once before running the manual ADO + auto-assign workflow.</p>
+
+    <ul class="checklist">
+      <li>GitHub repository <a href="https://github.com/sautalwar/brandsafway-copilot-demo">https://github.com/sautalwar/brandsafway-copilot-demo</a> has the GitHub Copilot coding agent enabled.</li>
+      <li>Azure DevOps project <a href="https://dev.azure.com/brandsafway1/Project1">https://dev.azure.com/brandsafway1/Project1</a> is connected to the GitHub repository so Azure Boards can detect <code>AB#</code> references.</li>
+      <li>The repository contains a label named <code>copilot-agent</code>.</li>
+      <li>The workflow file <code>.github/workflows/auto-assign-copilot.yml</code> exists in the repository.</li>
+    </ul>
+
+    <div class="grid-2">
+      <div class="panel blue">
+        <h4>Repository workflow</h4>
+        <p>The workflow listens for GitHub issue events and checks for the <code>copilot-agent</code> label before assigning Copilot.</p>
+      </div>
+      <div class="panel orange">
+        <h4>Important traceability note</h4>
+        <p>For the Azure DevOps comment behavior in this repository, include <code>AB#42</code> in the <strong>issue body</strong>. Including it in the title is still useful for visibility, but the workflow comment looks for <code>AB#</code> in the body.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="ado-work-item">
+    <div class="step-header">
+      <h3><span class="step-number">3</span>Step-by-Step: Create an ADO Work Item</h3>
+      <span class="time-badge">2–3 min</span>
+    </div>
+
+    <div class="panel green">
+      <h4>Action</h4>
+      <ol>
+        <li>Open Azure DevOps Boards: <a href="https://dev.azure.com/brandsafway1/Project1/_boards/board/t/">https://dev.azure.com/brandsafway1/Project1/_boards/board/t/</a>.</li>
+        <li>Create a new <strong>User Story</strong>, <strong>Bug</strong>, or <strong>Task</strong>.</li>
+        <li>Enter the business request, expected outcome, and enough detail for an engineer or agent to act on it.</li>
+        <li>Save the work item.</li>
+        <li>Note the work item ID, for example <code>42</code>.</li>
+      </ol>
+    </div>
+
+    <div class="panel blue">
+      <h4>Example</h4>
+      <p>If Azure DevOps creates work item <code>42</code>, that ID becomes the shared traceability token used in GitHub as <code>AB#42</code>.</p>
+    </div>
+
+    <div class="panel orange">
+      <h4>Best practice</h4>
+      <p>Keep the work item concise but outcome-focused. The GitHub issue will carry the richer implementation detail and acceptance criteria that the Copilot coding agent uses during execution.</p>
+    </div>
+  </section>
+
+  <section class="step" id="github-issue">
+    <div class="step-header">
+      <h3><span class="step-number">4</span>Step-by-Step: Create a GitHub Issue</h3>
+      <span class="time-badge">3–4 min</span>
+    </div>
+
+    <div class="panel green">
+      <h4>Action</h4>
+      <ol>
+        <li>Open the new issue page: <a href="https://github.com/sautalwar/brandsafway-copilot-demo/issues/new">https://github.com/sautalwar/brandsafway-copilot-demo/issues/new</a>.</li>
+        <li>In the title, include the Azure DevOps reference, for example: <code>Add stats endpoint AB#42</code>.</li>
+        <li>In the body, include:
+          <ul>
+            <li>a short description of the requested change,</li>
+            <li>clear acceptance criteria,</li>
+            <li>the Azure DevOps reference again, such as <code>AB#42</code>.</li>
+          </ul>
+        </li>
+        <li>Add the label <code>copilot-agent</code>.</li>
+        <li>Submit the issue.</li>
+      </ol>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel blue">
+        <h4>Suggested issue body template</h4>
+<pre><code>Summary
+Add the requested enhancement for the inspection tracker API.
+
+Acceptance Criteria
+- Endpoint returns the required data
+- Tests cover success cases
+- Existing behavior remains unchanged
+
+Traceability
+AB#42</code></pre>
+      </div>
+      <div class="panel orange">
+        <h4>Critical detail</h4>
+        <p>The repository workflow posts the Azure DevOps link comment only when it finds <code>AB#</code> in the issue body. Do not rely on the title alone for that part of the automation.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="automatic-flow">
+    <h3>5. What Happens Automatically</h3>
+    <p class="subtitle">After the issue is opened with the right label, the workflow takes over.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Automatic step</th>
+            <th>What happens</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Workflow trigger</strong></td>
+            <td><code>.github/workflows/auto-assign-copilot.yml</code> runs on <code>issues.opened</code> when the issue already has the <code>copilot-agent</code> label, and also on <code>issues.labeled</code> if the label is added later.</td>
+          </tr>
+          <tr>
+            <td><strong>Copilot assignment</strong></td>
+            <td>GitHub Copilot is assigned to the issue automatically.</td>
+          </tr>
+          <tr>
+            <td><strong>Confirmation comment</strong></td>
+            <td>A comment is posted confirming that the Copilot coding agent has been assigned.</td>
+          </tr>
+          <tr>
+            <td><strong>Azure DevOps note</strong></td>
+            <td>If an <code>AB#</code> reference is found in the issue body, the workflow adds a follow-up comment with the Azure DevOps work item link.</td>
+          </tr>
+          <tr>
+            <td><strong>Agent execution</strong></td>
+            <td>The Copilot coding agent begins working: it reads the issue, creates a branch, implements the change, writes tests, and opens a pull request.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="panel blue">
+      <h4>Workflow file location</h4>
+      <p>For reviewers or demo participants who want to inspect the automation, point them to <code>.github/workflows/auto-assign-copilot.yml</code> in <a href="https://github.com/sautalwar/brandsafway-copilot-demo">https://github.com/sautalwar/brandsafway-copilot-demo</a>.</p>
+    </div>
+  </section>
+
+  <section class="card" id="verify">
+    <h3>6. Verifying the Flow</h3>
+    <p class="subtitle">Use these checkpoints to confirm the manual-start / auto-assign path is working correctly.</p>
+
+    <div class="grid-2">
+      <div class="panel green">
+        <h4>Check in GitHub</h4>
+        <ul>
+          <li>Open the issue and confirm Copilot is assigned.</li>
+          <li>Open the <strong>Actions</strong> tab and verify the <strong>Auto-assign Copilot agent</strong> workflow completed successfully.</li>
+          <li>Watch for the assignment comment and the Azure DevOps note comment.</li>
+        </ul>
+      </div>
+      <div class="panel blue">
+        <h4>Check in Azure DevOps</h4>
+        <ul>
+          <li>Open the work item in <a href="https://dev.azure.com/brandsafway1/Project1">https://dev.azure.com/brandsafway1/Project1</a>.</li>
+          <li>Check the <strong>Development</strong> panel for the linked GitHub issue.</li>
+          <li>Wait for later branch / PR artifacts to appear as Copilot works.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel orange">
+      <h4>What to expect next</h4>
+      <p>After assignment, allow time for the Copilot coding agent to create a branch, implement the requested change, add tests, and open a pull request in <a href="https://github.com/sautalwar/brandsafway-copilot-demo">https://github.com/sautalwar/brandsafway-copilot-demo</a>.</p>
+    </div>
+  </section>
+
+  <section class="card" id="labels">
+    <h3>7. Label Management</h3>
+    <p class="subtitle">The <code>copilot-agent</code> label is the switch that places an issue on the Copilot path.</p>
+
+    <div class="grid-2">
+      <div class="panel green">
+        <h4>Create the label in GitHub UI</h4>
+        <p>Create <code>copilot-agent</code> from the repository label management area in GitHub (commonly <strong>Issues → Labels</strong>, or via repository settings access depending on your permissions).</p>
+      </div>
+      <div class="panel blue">
+        <h4>Create the label with GitHub CLI</h4>
+<pre><code>gh label create copilot-agent --repo sautalwar/brandsafway-copilot-demo --color 0f3d75 --description "Routes issues to the GitHub Copilot coding agent"</code></pre>
+      </div>
+    </div>
+
+    <div class="panel green">
+      <h4>Add the label after issue creation</h4>
+      <p>If the issue was created without <code>copilot-agent</code>, add the label later. That fires the <code>labeled</code> event, which the workflow also supports.</p>
+    </div>
+
+    <div class="panel blue">
+      <h4>Other useful labels</h4>
+      <ul>
+        <li><code>ado-synced</code> — shows the issue is part of the Azure DevOps traceability flow.</li>
+        <li><code>severity:low</code>, <code>severity:medium</code>, <code>severity:high</code> — useful for demo filtering and prioritization.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="card" id="troubleshooting">
+    <h3>8. Troubleshooting</h3>
+    <p class="subtitle">Most issues come down to labels, event triggers, or the <code>AB#</code> reference format.</p>
+
+    <div class="grid-2">
+      <div class="panel orange">
+        <h4>Copilot not assigned</h4>
+        <ul>
+          <li>Verify the label name is exactly <code>copilot-agent</code>.</li>
+          <li>Confirm the workflow has permission to edit issues.</li>
+          <li>Check the Actions tab for a failed or skipped run.</li>
+        </ul>
+      </div>
+      <div class="panel orange">
+        <h4>No Azure DevOps link comment</h4>
+        <ul>
+          <li>Confirm the issue body includes a valid reference such as <code>AB#42</code>.</li>
+          <li>Check for typos like <code>AB 42</code>, <code>#42</code>, or lowercase variations that do not match the expected format.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel orange">
+        <h4>Workflow did not trigger</h4>
+        <ul>
+          <li>Open the Actions tab in <a href="https://github.com/sautalwar/brandsafway-copilot-demo">https://github.com/sautalwar/brandsafway-copilot-demo</a>.</li>
+          <li>Verify the issue event was <code>opened</code> with the label present, or <code>labeled</code> when the label was added later.</li>
+          <li>Confirm <code>.github/workflows/auto-assign-copilot.yml</code> exists on the default branch.</li>
+        </ul>
+      </div>
+      <div class="panel blue">
+        <h4>Fast demo recovery</h4>
+        <p>If a live demo misfires, add or remove/re-add the <code>copilot-agent</code> label to trigger the <code>labeled</code> path again, then refresh the issue and Actions tab.</p>
+      </div>
+    </div>
+
+    <p class="print-note">This page is intentionally self-contained and print-friendly so it can be shared as a one-file setup guide for the BrandSafway manual ADO + automated GitHub Copilot path.</p>
+  </section>
+</main>
+</body>
+</html>

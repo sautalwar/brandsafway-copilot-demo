@@ -58,6 +58,13 @@ app.delete('/api/inspections/:id', (req, res) => {
   return res.status(204).send();
 });
 
+// TODO: Add GET /api/inspections/stats endpoint.
+// It should return summary statistics including:
+//   - total: total number of inspections
+//   - byStatus: object with counts for each status (open, in-review, closed, scheduled)
+//   - bySeverity: object with counts for each severity (low, medium, high)
+//   - recentCount: number of inspections in the last 30 days
+
 // TODO: Add centralized error handling middleware.
 
 module.exports = app;
